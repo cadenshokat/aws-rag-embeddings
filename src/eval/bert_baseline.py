@@ -70,7 +70,7 @@ def clustering_purity(model_name="bert-base-uncased", sample_size=2000, batch_si
 
 
 if __name__ == "__main__":
-    spearman_eval()
+    # spearman_eval()
     clustering_purity()
 
     
