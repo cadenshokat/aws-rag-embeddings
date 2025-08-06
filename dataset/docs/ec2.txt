@@ -1,0 +1,778 @@
+Amazon Elastic Compute Cloud
+
+User Guide
+
+What is Amazon EC2?
+Amazon Elastic Compute Cloud (Amazon EC2) provides on-demand, scalable computing capacity
+in the Amazon Web Services (AWS) Cloud. Using Amazon EC2 reduces hardware costs so you can
+develop and deploy applications faster. You can use Amazon EC2 to launch as many or as few
+virtual servers as you need, conﬁgure security and networking, and manage storage. You can add
+capacity (scale up) to handle compute-heavy tasks, such as monthly or yearly processes, or spikes in
+website traﬃc. When usage decreases, you can reduce capacity (scale down) again.
+An EC2 instance is a virtual server in the AWS Cloud. When you launch an EC2 instance, the
+instance type that you specify determines the hardware available to your instance. Each instance
+type oﬀers a diﬀerent balance of compute, memory, network, and storage resources. For more
+information, see the Amazon EC2 Instance Types Guide.
+
+Features of Amazon EC2
+Amazon EC2 provides the following high-level features:
+Instances
+Virtual servers.
+Amazon Machine Images (AMIs)
+Preconﬁgured templates for your instances that package the components you need for your
+server (including the operating system and additional software).
+Instance types
+Various conﬁgurations of CPU, memory, storage, networking capacity, and graphics hardware
+for your instances.
+Features
+
+1
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Amazon EBS volumes
+Persistent storage volumes for your data using Amazon Elastic Block Store (Amazon EBS).
+Instance store volumes
+Storage volumes for temporary data that is deleted when you stop, hibernate, or terminate
+your instance.
+Key pairs
+Secure login information for your instances. AWS stores the public key and you store the private
+key in a secure place.
+Security groups
+A virtual ﬁrewall that allows you to specify the protocols, ports, and source IP ranges that can
+reach your instances, and the destination IP ranges to which your instances can connect.
+Amazon EC2 supports the processing, storage, and transmission of credit card data by a merchant
+or service provider, and has been validated as being compliant with Payment Card Industry (PCI)
+Data Security Standard (DSS). For more information about PCI DSS, including how to request a
+copy of the AWS PCI Compliance Package, see PCI DSS Level 1.
+
+Related services
+Services to use with Amazon EC2
+You can use other AWS services with the instances that you deploy using Amazon EC2.
+Amazon EC2 Auto Scaling
+Helps ensure you have the correct number of Amazon EC2 instances available to handle the
+load for your application.
+AWS Backup
+Automate backing up your Amazon EC2 instances and the Amazon EBS volumes attached to
+them.
+Amazon CloudWatch
+Monitor your instances and Amazon EBS volumes.
+Related services
+
+2
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Elastic Load Balancing
+Automatically distribute incoming application traﬃc across multiple instances.
+Amazon GuardDuty
+Detect potentially unauthorized or malicious use of your EC2 instances.
+EC2 Image Builder
+Automate the creation, management, and deployment of customized, secure, and up-to-date
+server images.
+AWS Launch Wizard
+Size, conﬁgure, and deploy AWS resources for third-party applications without having to
+manually identify and provision individual AWS resources.
+AWS Systems Manager
+Perform operations at scale on EC2 instances with this secure end-to-end management
+solution.
+Additional compute services
+You can launch instances using another AWS compute service instead of using Amazon EC2.
+Amazon Lightsail
+Build websites or web applications using Amazon Lightsail, a cloud platform that provides the
+resources that you need to deploy your project quickly, for a low, predictable monthly price. To
+compare Amazon EC2 and Lightsail, see Amazon Lightsail or Amazon EC2.
+Amazon Elastic Container Service (Amazon ECS)
+Deploy, manage, and scale containerized applications on a cluster of EC2 instances. For more
+information, see Choosing an AWS container service.
+Amazon Elastic Kubernetes Service (Amazon EKS)
+Run your Kubernetes applications on AWS. For more information, see Choosing an AWS
+container service.
+
+Related services
+
+3
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Access Amazon EC2
+You can create and manage your Amazon EC2 instances using the following interfaces:
+Amazon EC2 console
+A simple web interface to create and manage Amazon EC2 instances and resources. If you've
+signed up for an AWS account, you can access the Amazon EC2 console by signing into the AWS
+Management Console and selecting EC2 from the console home page.
+AWS Command Line Interface
+Enables you to interact with AWS services using commands in your command-line shell. It is
+supported on Windows, Mac, and Linux. For more information about the AWS CLI , see AWS
+Command Line Interface User Guide. You can ﬁnd the Amazon EC2 commands in the AWS CLI
+Command Reference.
+AWS CloudFormation
+Amazon EC2 supports creating resources using AWS CloudFormation. You create a template, in
+JSON or YAML format, that describes your AWS resources, and AWS CloudFormation provisions
+and conﬁgures those resources for you. You can reuse your CloudFormation templates to
+provision the same resources multiple times, whether in the same Region and account or in
+multiple Regions and accounts. For more information about supported resource types and
+properties for Amazon EC2, see EC2 resource type reference in the AWS CloudFormation User
+Guide.
+AWS SDKs
+If you prefer to build applications using language-speciﬁc APIs instead of submitting a request
+over HTTP or HTTPS, AWS provides libraries, sample code, tutorials, and other resources
+for software developers. These libraries provide basic functions that automate tasks such
+as cryptographically signing your requests, retrying requests, and handling error responses,
+making it easier for you to get started. For more information, see Tools to Build on AWS.
+AWS Tools for PowerShell
+A set of PowerShell modules that are built on the functionality exposed by the SDK for .NET.
+The Tools for PowerShell enable you to script operations on your AWS resources from the
+PowerShell command line. To get started, see the AWS Tools for PowerShell User Guide. You
+can ﬁnd the cmdlets for Amazon EC2, in the AWS Tools for PowerShell Cmdlet Reference.
+Access EC2
+
+4
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Query API
+Amazon EC2 provides a Query API. These requests are HTTP or HTTPS requests that use the
+HTTP verbs GET or POST and a Query parameter named Action. For more information about
+the API actions for Amazon EC2, see Actions in the Amazon EC2 API Reference.
+
+Pricing for Amazon EC2
+Amazon EC2 provides the following pricing options:
+Free Tier
+You can get started with Amazon EC2 for free. To explore the Free Tier options, see AWS Free
+Tier.
+On-Demand Instances
+Pay for the instances that you use by the second, with a minimum of 60 seconds, with no longterm commitments or upfront payments.
+Savings Plans
+You can reduce your Amazon EC2 costs by making a commitment to a consistent amount of
+usage, in USD per hour, for a term of 1 or 3 years.
+Reserved Instances
+You can reduce your Amazon EC2 costs by making a commitment to a speciﬁc instance
+conﬁguration, including instance type and Region, for a term of 1 or 3 years.
+Spot Instances
+Request unused EC2 instances, which can reduce your Amazon EC2 costs signiﬁcantly.
+Dedicated Hosts
+Reduce costs by using a physical EC2 server that is fully dedicated for your use, either OnDemand or as part of a Savings Plan. You can use your existing server-bound software licenses
+and get help meeting compliance requirements.
+On-Demand Capacity Reservations
+Reserve compute capacity for your EC2 instances in a speciﬁc Availability Zone for any duration
+of time.
+Pricing
+
+5
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Per-second billing
+Removes the cost of unused minutes and seconds from your bill.
+For a complete list of charges and prices for Amazon EC2 and more information about the purchase
+models, see Amazon EC2 pricing.
+
+Estimates, billing, and cost optimization
+To create estimates for your AWS use cases, use the AWS Pricing Calculator.
+To estimate the cost of transforming Microsoft workloads to a modern architecture that uses
+open source and cloud-native services deployed on AWS, use the AWS Modernization Calculator for
+Microsoft Workloads.
+To see your bill, go to the Billing and Cost Management Dashboard in the AWS Billing and Cost
+Management console. Your bill contains links to usage reports that provide details about your bill.
+To learn more about AWS account billing, see AWS Billing and Cost Management User Guide.
+If you have questions concerning AWS billing, accounts, and events, contact AWS Support.
+To calculate the cost of a sample provisioned environment, see Cloud Economics Center. When
+calculating the cost of a provisioned environment, remember to include incidental costs such as
+snapshot storage for EBS volumes.
+You can optimize the cost, security, and performance of your AWS environment using AWS Trusted
+Advisor.
+You can use AWS Cost Explorer to analyze the cost and usage of your EC2 instances. You can view
+data up to the last 13 months, and forecast how much you are likely to spend for the next 12
+months. For more information, see Analyzing your costs and usage with AWS Cost Explorer in the
+AWS Cost Management User Guide.
+
+Resources
+• Amazon EC2 features
+• AWS re:Post
+• AWS Skill Builder
+• AWS Support
+Estimates, billing, and cost optimization
+
+6
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Hands-on Tutorials
+• Web Hosting
+• Windows on AWS
+
+Resources
+
+7
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Get started with Amazon EC2
+Use this tutorial to get started with Amazon Elastic Compute Cloud (Amazon EC2). You'll learn how
+to launch and connect to an EC2 instance. An instance is a virtual server in the AWS Cloud. With
+Amazon EC2, you can set up and conﬁgure the operating system and applications that run on your
+instance.
+Overview
+The following diagram shows the key components that you'll use in this tutorial:
+• An image – A template that contains the software to run on your instance, such as the operating
+system.
+• A key pair – A set of security credentials that you use to prove your identity when connecting to
+your instance. The public key is on your instance and the private key is on your computer.
+• A network – A virtual private cloud (VPC) is a virtual network dedicated to your AWS account.
+To help you get started quickly, your account comes with a default VPC in each AWS Region, and
+each default VPC has a default subnet in each Availability Zone.
+• A security group – Acts as a virtual ﬁrewall to control inbound and outbound traﬃc.
+• An EBS volume – We require a root volume for the image. You can optionally add data volumes.
+
+8
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Cost for this tutorial
+When you create your AWS account, you can get started with Amazon EC2 for free using the AWS
+Free Tier.
+If you created your AWS account before July 15, 2025, it's less than 12 months old, and you haven't
+already exceeded the Free Tier beneﬁts for Amazon EC2, it won't cost you anything to complete
+this tutorial, because we help you select options that are within the Free Tier beneﬁts. Otherwise,
+you'll incur the standard Amazon EC2 usage fees from the time that you launch the instance (even
+if it remains idle) until you terminate it.
+If you created your AWS account on or after July 15, 2025, it's less than 6 months old, and you
+haven't used up all your credits, it won't cost you anything to complete this tutorial, because we
+help you select options that are within the Free Tier beneﬁts.
+For information on how to determine whether you are eligible for the Free Tier, see the section
+called “Track your Free Tier usage”.
+Tasks
+• Step 1: Launch an instance
+• Step 2: Connect to your instance
+• Step 3: Clean up your instance
+9
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Next steps
+
+Step 1: Launch an instance
+You can launch an EC2 instance using the AWS Management Console as described in the following
+procedure. This tutorial is intended to help you quickly launch your ﬁrst instance, so it doesn't
+cover all possible options.
+To launch an instance
+1.
+
+Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+
+2.
+
+In the navigation bar at the top of the screen, we display the current AWS Region — for
+example, Ohio. You can use the selected Region, or optionally select a Region that is closer to
+you.
+
+3.
+
+From the EC2 console dashboard, in the Launch instance pane, choose Launch instance.
+
+4.
+
+Under Name and tags, for Name, enter a descriptive name for your instance.
+
+5.
+
+Under Application and OS Images (Amazon Machine Image), do the following:
+a.
+
+Choose Quick Start, and then choose the operating system (OS) for your instance. For
+your ﬁrst Linux instance, we recommend that you choose Amazon Linux.
+
+b.
+
+From Amazon Machine Image (AMI), select an AMI that is marked Free Tier eligible.
+
+6.
+
+Under Instance type, for Instance type, select an instance type that is marked Free Tier
+eligible.
+
+7.
+
+Under Key pair (login), for Key pair name, choose an existing key pair or choose Create new
+key pair to create your ﬁrst key pair.
+
+Warning
+If you choose Proceed without a key pair (Not recommended), you won't be able to
+connect to your instance using the methods described in this tutorial.
+8.
+
+Under Network settings, notice that we selected your default VPC, selected the option to use
+the default subnet in an Availability Zone that we choose for you, and conﬁgured a security
+group with a rule that allows connections to your instance from anywhere (0.0.0.0.0/0).
+
+Step 1: Launch an instance
+
+10
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Warning
+If you specify 0.0.0.0/0, you are enabling traﬃc from any IP addresses in the world.
+For the SSH and RDP protocols, you might consider this acceptable for a short time
+in a test environment, but it's unsafe for production environments. In production, be
+sure to authorize access only from the appropriate individual IP address or range of
+addresses.
+
+For your ﬁrst instance, we recommend that you use the default settings. Otherwise, you can
+update your network settings as follows:
+
+9.
+
+•
+
+(Optional) To use a speciﬁc default subnet, choose Edit and then choose a subnet.
+
+•
+
+(Optional) To use a diﬀerent VPC, choose Edit and then choose an existing VPC. If the VPC
+isn't conﬁgured for public internet access, you won't be able to connect to your instance.
+
+•
+
+(Optional) To restrict inbound connection traﬃc to a speciﬁc network, choose Custom
+instead of Anywhere, and enter the CIDR block for your network.
+
+•
+
+(Optional) To use a diﬀerent security group, choose Select existing security group and
+choose an existing security group. If the security group does not have a rule that allows
+connection traﬃc from your network, you won't be able to connect to your instance. For
+a Linux instance, you must allow SSH traﬃc. For a Windows instance, you must allow RDP
+traﬃc.
+
+Under Conﬁgure storage, notice that we conﬁgured a root volume but no data volumes. This
+is suﬃcient for test purposes.
+
+10. Review a summary of your instance conﬁguration in the Summary panel, and when you're
+ready, choose Launch instance.
+11. If the launch is successful, choose the ID of the instance from the Success notiﬁcation to open
+the Instances page and monitor the status of the launch.
+12. Select the checkbox for the instance. The initial instance state is pending. After the instance
+starts, its state changes to running. Choose the Status and alarms tab. After your instance
+passes its status checks, it is ready to receive connection requests.
+
+Step 1: Launch an instance
+
+11
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Step 2: Connect to your instance
+The procedure that you use depends on the operating system of the instance. If you can't connect
+to your instance, see Troubleshoot issues connecting to your Amazon EC2 Linux instance for
+assistance.
+
+Linux instances
+You can connect to your Linux instance using any SSH client. If you are running Windows on
+your computer, open a terminal and run the ssh command to verify that you have an SSH client
+installed. If the command is not found, install OpenSSH for Windows.
+To connect to your instance using SSH
+1.
+
+Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+
+2.
+
+In the navigation pane, choose Instances.
+
+3.
+
+Select the instance and then choose Connect.
+
+4.
+
+On the Connect to instance page, choose the SSH client tab.
+
+5.
+
+(Optional) If you created a key pair when you launched the instance and downloaded the
+private key (.pem ﬁle) to a computer running Linux or macOS, run the example chmod
+command to set the permissions for your private key.
+
+6.
+
+Copy the example SSH command. The following is an example, where key-pair-name.pem
+is the name of your private key ﬁle, ec2-user is the username associated with the image, and
+the string after the @ symbol is the public DNS name of the instance.
+ssh -i key-pair-name.pem ec2-user@ec2-198-51-100-1.us-east-2.compute.amazonaws.com
+
+7.
+
+In a terminal window on your computer, run the ssh command that you saved in the previous
+step. If the private key ﬁle is not in the current directory, you must specify the fully-qualiﬁed
+path to the key ﬁle in this command.
+The following is an example response:
+The authenticity of host 'ec2-198-51-100-1.us-east-2.compute.amazonaws.com
+(198-51-100-1)' can't be established.
+ECDSA key fingerprint is l4UB/neBad9tvkgJf1QZWxheQmR59WgrgzEimCG6kZY.
+Are you sure you want to continue connecting (yes/no)?
+
+Step 2: Connect to your instance
+
+12
+
+Amazon Elastic Compute Cloud
+
+8.
+
+User Guide
+
+(Optional) Verify that the ﬁngerprint in the security alert matches the instance ﬁngerprint
+contained in the console output when you ﬁrst start an instance. To get the console output,
+choose Actions, Monitor and troubleshoot, Get system log. If the ﬁngerprints don't match,
+someone might be attempting a man-in-the-middle attack. If they match, continue to the next
+step.
+
+9.
+
+Enter yes.
+The following is an example response:
+Warning: Permanently added 'ec2-198-51-100-1.useast-2.compute.amazonaws.com' (ECDSA) to the list of known hosts.
+
+Windows instances
+To connect to a Windows instance using RDP, you must retrieve the initial administrator password
+and then enter this password when you connect to your instance. It takes a few minutes after
+instance launch before this password is available. Your account must have permission to call the
+GetPasswordData action. For more information, see Example policies to control access the Amazon
+EC2 API.
+The default username for the Administrator account depends on the language of the operating
+system (OS) contained in the AMI. To determine the correct username, identify the language
+of the OS, and then choose the corresponding username. For example, for an English OS, the
+username is Administrator, for a French OS it's Administrateur, and for a Portuguese OS it's
+Administrador. If a language version of the OS does not have a username in the same language,
+choose the username Administrator (Other). For more information, see Localized Names for
+Administrator Account in Windows in the Microsoft website.
+To retrieve the initial administrator password
+1.
+
+Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+
+2.
+
+In the navigation pane, choose Instances.
+
+3.
+
+Select the instance and then choose Connect.
+
+4.
+
+On the Connect to instance page, choose the RDP client tab.
+
+5.
+
+For Username, choose the default username for the Administrator account. The username you
+choose must match the language of the operating system (OS) contained in the AMI that you
+
+Step 2: Connect to your instance
+
+13
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+used to launch your instance. If there is no username in the same language as your OS, choose
+Administrator (Other).
+6.
+
+Choose Get password.
+
+7.
+
+On the Get Windows password page, do the following:
+a.
+
+Choose Upload private key ﬁle and navigate to the private key (.pem) ﬁle that you
+speciﬁed when you launched the instance. Select the ﬁle and choose Open to copy the
+entire contents of the ﬁle to this window.
+
+b.
+
+Choose Decrypt password. The Get Windows password page closes, and the default
+administrator password for the instance appears under Password, replacing the Get
+password link shown previously.
+
+c.
+
+Copy the password and save it in a safe place. This password is required to connect to the
+instance.
+
+The following procedure uses the Remote Desktop Connection client for Windows (MSTSC). If
+you're using a diﬀerent RDP client, download the RDP ﬁle and then see the documentation for the
+RDP client for the steps to establish the RDP connection.
+To connect to a Windows instance using an RDP client
+1.
+
+On the Connect to instance page, choose Download remote desktop ﬁle. When the
+ﬁle download is ﬁnished, choose Cancel to return to the Instances page. The RDP ﬁle is
+downloaded to your Downloads folder.
+
+2.
+
+Run mstsc.exe to open the RDP client.
+
+3.
+
+Expand Show options, choose Open, and select the .rdp ﬁle from your Downloads folder.
+
+4.
+
+By default, Computer is the public IPv4 DNS name of the instance and User name is the
+administrator account. To connect to the instance using IPv6 instead, replace the public IPv4
+DNS name of the instance with its IPv6 address. Review the default settings and change them
+as needed.
+
+5.
+
+Choose Connect. If you receive a warning that the publisher of the remote connection is
+unknown, choose Connect to continue.
+
+6.
+
+Enter the password that you saved previously, and then choose OK.
+
+7.
+
+Due to the nature of self-signed certiﬁcates, you might get a warning that the security
+certiﬁcate could not be authenticated. Do one of the following:
+•
+
+If you trust the certiﬁcate, choose Yes to connect to your instance.
+
+Step 2: Connect to your instance
+
+14
+
+Amazon Elastic Compute Cloud
+
+•
+
+User Guide
+
+[Windows] Before you proceed, compare the thumbprint of the certiﬁcate with the value
+in the system log to conﬁrm the identity of the remote computer. Choose View certiﬁcate
+and then choose Thumbprint from the Details tab. Compare this value to the value of
+RDPCERTIFICATE-THUMBPRINT in Actions, Monitor and troubleshoot, Get system log.
+
+•
+
+[Mac OS X] Before you proceed, compare the ﬁngerprint of the certiﬁcate with the
+value in the system log to conﬁrm the identity of the remote computer. Choose Show
+Certiﬁcate, expand Details, and choose SHA1 Fingerprints. Compare this value to the
+value of RDPCERTIFICATE-THUMBPRINT in Actions, Monitor and troubleshoot, Get
+system log.
+
+8.
+
+If the RDP connection is successful, the RDP client displays the Windows login screen and
+then the Windows desktop. If you receive an error message instead, see the section called
+“Remote Desktop can't connect to the remote computer”. When you are ﬁnished with the RDP
+connection, you can close the RDP client.
+
+Step 3: Clean up your instance
+After you've ﬁnished with the instance that you created for this tutorial, you should clean up by
+terminating the instance. If you want to do more with this instance before you clean up, see Next
+steps.
+
+Important
+Terminating an instance eﬀectively deletes it; you can't reconnect to an instance after
+you've terminated it.
+
+You'll stop incurring charges for that instance or usage that counts against your Free Tier limits as
+soon as the instance status changes to shutting down or terminated. To keep your instance
+for later, but not incur charges or usage that counts against your Free Tier limits, you can stop the
+instance now and then start it again later. For more information, see Stop and start Amazon EC2
+instances.
+To terminate your instance
+1.
+
+In the navigation pane, choose Instances. In the list of instances, select the instance.
+
+2.
+
+Choose Instance state, Terminate (delete) instance.
+
+Step 3: Clean up your instance
+
+15
+
+Amazon Elastic Compute Cloud
+
+3.
+
+User Guide
+
+Choose Terminate (delete) when prompted for conﬁrmation.
+Amazon EC2 shuts down and terminates your instance. After your instance is terminated, it
+remains visible on the console for a short while, and then the entry is automatically deleted.
+You cannot remove the terminated instance from the console display yourself.
+
+Next steps
+After you start your instance, you might want to explore the following next steps:
+• Explore the Amazon EC2 core concepts with the introductory tutorials. For more information, see
+Tutorials for launching EC2 instances.
+• Learn how to track your Amazon EC2 Free Tier usage using the console. For more information,
+see the section called “Track your Free Tier usage”.
+• Conﬁgure a CloudWatch alarm to notify you if your usage exceeds the Free Tier (for accounts
+created before July 15, 2025). For more information, see Tracking your AWS Free Tier usage in
+the AWS Billing User Guide.
+• Add an EBS volume. For more information, see Create an Amazon EBS volume in the Amazon EBS
+User Guide.
+• Learn how to remotely manage your EC2 instance using the Run command. For more
+information, see AWS Systems Manager Run Command in the AWS Systems Manager User Guide.
+• Learn about instance purchasing options. For more information, see Amazon EC2 billing and
+purchasing options.
+• Get advice about instance types. For more information, see Get recommendations from EC2
+instance type ﬁnder.
+
+Next steps
+
+16
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Best practices for Amazon EC2
+To ensure the maximum beneﬁt from Amazon EC2, we recommend that you perform the following
+best practices.
+Security
+• Manage access to AWS resources and APIs using identity federation with an identity provider and
+IAM roles whenever possible. For more information, see Creating IAM policies in the IAM User
+Guide.
+• Implement the least permissive rules for your security group.
+• Regularly patch, update, and secure the operating system and applications on your instance.
+For more information, see Update management. For guidelines speciﬁc to Windows operating
+systems, see Security best practices for Windows instances.
+• Use Amazon Inspector to automatically discover and scan Amazon EC2 instances for software
+vulnerabilities and unintended network exposure. For more information, see the Amazon
+Inspector User Guide.
+• Use AWS Security Hub controls to monitor your Amazon EC2 resources against security best
+practices and security standards. For more information about using Security Hub, see Amazon
+Elastic Compute Cloud controls in the AWS Security Hub User Guide.
+Storage
+• Understand the implications of the root device type for data persistence, backup, and recovery.
+For more information, see Root device type.
+• Use separate Amazon EBS volumes for the operating system versus your data. Ensure that the
+volume with your data persists after instance termination. For more information, see Preserve
+data when an instance is terminated.
+• Use the instance store available for your instance to store temporary data. Remember that the
+data stored in instance store is deleted when you stop, hibernate, or terminate your instance.
+If you use instance store for database storage, ensure that you have a cluster with a replication
+factor that ensures fault tolerance.
+• Encrypt EBS volumes and snapshots. For more information, see Amazon EBS encryption in the
+Amazon EBS User Guide.
+17
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Resource management
+• Use instance metadata and custom resource tags to track and identify your AWS resources.
+For more information, see Use instance metadata to manage your EC2 instance and Tag your
+Amazon EC2 resources.
+• View your current limits for Amazon EC2. Plan to request any limit increases in advance of the
+time that you'll need them. For more information, see Amazon EC2 service quotas.
+• Use AWS Trusted Advisor to inspect your AWS environment, and then make recommendations
+when opportunities exist to save money, improve system availability and performance, or help
+close security gaps. For more information, see AWS Trusted Advisor in the AWS Support User
+Guide.
+Backup and recovery
+• Regularly back up your EBS volumes using Amazon EBS snapshots, and create an Amazon
+Machine Image (AMI) from your instance to save the conﬁguration as a template for launching
+future instances. For more information about AWS services that help achieve this use case, see
+AWS Backup and Amazon Data Lifecycle Manager.
+• Deploy critical components of your application across multiple Availability Zones, and replicate
+your data appropriately.
+• Design your applications to handle dynamic IP addressing when your instance restarts. For more
+information, see Amazon EC2 instance IP addressing.
+• Monitor and respond to events. For more information, see Monitor Amazon EC2 resources.
+• Ensure that you are prepared to handle failover. For a basic solution, you can manually attach
+a network interface or Elastic IP address to a replacement instance. For more information, see
+Elastic network interfaces. For an automated solution, you can use Amazon EC2 Auto Scaling. For
+more information, see the Amazon EC2 Auto Scaling User Guide.
+• Regularly test the process of recovering your instances and Amazon EBS volumes to ensure data
+and services are restored successfully.
+Networking
+• Set the time-to-live (TTL) value for your applications to 255, for IPv4 and IPv6. If you use a
+smaller value, there is a risk that the TTL will expire while application traﬃc is in transit, causing
+reachability issues for your instances.
+
+18
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Amazon Machine Images in Amazon EC2
+An Amazon Machine Image (AMI) is an image that provides the software that is required to set up
+and boot an Amazon EC2 instance. Each AMI also contains a block device mapping that speciﬁes
+the block devices to attach to the instances that you launch. You must specify an AMI when you
+launch an instance. The AMI must be compatible with the instance type that you chose for your
+instance. You can use an AMI provided by AWS, a public AMI, an AMI that someone else shared with
+you, or an AMI that you purchased from the AWS Marketplace.
+An AMI is speciﬁc to the following:
+• Region
+• Operating system
+• Processor architecture
+• Root device type
+• Virtualization type
+You can launch multiple instances from a single AMI when you require multiple instances with the
+same conﬁguration. You can use diﬀerent AMIs to launch instances when you require instances
+with diﬀerent conﬁgurations, as shown in the following diagram.
+
+19
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+You can create an AMI from your Amazon EC2 instances and then use it to launch instances with
+the same conﬁguration. You can copy an AMI to another AWS Region, and then use it to launch
+instances in that Region. You can also share an AMI that you created with other accounts so that
+they can launch instances with the same conﬁguration. You can sell your AMI using the AWS
+Marketplace.
+Contents
+• AMI types and characteristics in Amazon EC2
+• Find an AMI that meets the requirements for your EC2 instance
+• Paid AMIs in the AWS Marketplace for Amazon EC2 instances
+• Amazon EC2 AMI lifecycle
+• Instance launch behavior with Amazon EC2 boot modes
+• Use encryption with EBS-backed AMIs
+• Understand shared AMI usage in Amazon EC2
+• Monitor AMI events using Amazon EventBridge
+• Understand AMI billing information
+• AMI quotas in Amazon EC2
+20
+
+
