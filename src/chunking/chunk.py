@@ -1,17 +1,21 @@
 import argparse
 import os
 import json
-from typing import List
+from typing import List, Dict
 from chunker import Chunker
 
 def chunk_file(file_path: str, chunker: Chunker) -> List[str]:
+    doc_id = os.path.splitext(os.path.basename(file_path))[0]
+
     with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()
-    return chunker.split_text(text)
 
-def save_chunks(original_file: str, chunks: List[str], input_root: str, output_dir: str):
+    raw_chunks = chunker.split_text(text)
+    return [{ "doc_id": doc_id, "chunk_id": f"{i}", "text": chunk } for i, chunk in enumerate(raw_chunks)]
+
+def save_chunks(original_file: str, chunks: List[Dict], input_root: str, output_dir: str):
     rel_path = os.path.relpath(original_file, input_root)
-    base_name = os.path.splitext(rel_path)[0] + "_chunks.json"
+    base_name = os.path.splitext(rel_path)[0] + ".json"
     out_path = os.path.join(output_dir, base_name)
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)

@@ -25,12 +25,17 @@ def generate(model: str, prompt: str) -> List[Dict]:
                 messages=[
                     { "role": "system", "content":        
                     """
-                        You are an expert at generating reading-comprehension questions in **strict JSON** form. 
-                        Given the user’s chunk, you will output **only** a JSON array of objects—no commentary, no extra text.
-                        Each object must have:
+                        Given the chunk, you will output **only** a JSON array of objects—no extra text.
+                        You will generate exactly **4** question-answer items in strict JSON.
+
+                        Rules:
+                            - Questions must be answerable using ONLY the chunk text below (no outside knowledge).
+                            - Prefer the chunk’s exact terminology; minimal paraphrase for grammar only.
+                            - The answer_span must be an exact contiguous substring from the chunk.
+
+                        Output:
                         - question    : the question text
                         - answer_span : the exact sentence from the chunk that answers this question
-                        Output exactly 4 questions.
                     """ 
                     },
                     { "role": "user", "content": prompt }
@@ -39,7 +44,6 @@ def generate(model: str, prompt: str) -> List[Dict]:
                 max_tokens=NUM_QUESTIONS * 100
             )
             text = resp.choices[0].message.content.strip()
-            print(text)
             raw = text
             raw = re.sub(r"^```(?:json)?\s*", "", raw)
             raw = re.sub(r"```$", "", raw).strip()
@@ -50,7 +54,6 @@ def generate(model: str, prompt: str) -> List[Dict]:
 
             arr = json.loads(raw)
 
-            print(arr)
             return arr
         except json.JSONDecodeError as e:
             print("Failed to parse JSON, retrying...", e)
@@ -95,6 +98,7 @@ def main():
                 }
                 out_f.write(json.dumps(out, ensure_ascii=False) + "\n")
                 total += 1
+                print(f"Chunk {total} done.")
             time.sleep(args.sleep)
 
     print(f"Done — generated {total} questions across {len(chunks)} chunks into '{args.output}'.")
