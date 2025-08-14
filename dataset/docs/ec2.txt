@@ -67,40 +67,6 @@ Related services
 
 User Guide
 
-Elastic Load Balancing
-Automatically distribute incoming application traﬃc across multiple instances.
-Amazon GuardDuty
-Detect potentially unauthorized or malicious use of your EC2 instances.
-EC2 Image Builder
-Automate the creation, management, and deployment of customized, secure, and up-to-date
-server images.
-AWS Launch Wizard
-Size, conﬁgure, and deploy AWS resources for third-party applications without having to
-manually identify and provision individual AWS resources.
-AWS Systems Manager
-Perform operations at scale on EC2 instances with this secure end-to-end management
-solution.
-Additional compute services
-You can launch instances using another AWS compute service instead of using Amazon EC2.
-Amazon Lightsail
-Build websites or web applications using Amazon Lightsail, a cloud platform that provides the
-resources that you need to deploy your project quickly, for a low, predictable monthly price. To
-compare Amazon EC2 and Lightsail, see Amazon Lightsail or Amazon EC2.
-Amazon Elastic Container Service (Amazon ECS)
-Deploy, manage, and scale containerized applications on a cluster of EC2 instances. For more
-information, see Choosing an AWS container service.
-Amazon Elastic Kubernetes Service (Amazon EKS)
-Run your Kubernetes applications on AWS. For more information, see Choosing an AWS
-container service.
-
-Related services
-
-3
-
-Amazon Elastic Compute Cloud
-
-User Guide
-
 Access Amazon EC2
 You can create and manage your Amazon EC2 instances using the following interfaces:
 Amazon EC2 console
@@ -134,89 +100,6 @@ can ﬁnd the cmdlets for Amazon EC2, in the AWS Tools for PowerShell Cmdlet Ref
 Access EC2
 
 4
-
-Amazon Elastic Compute Cloud
-
-User Guide
-
-Query API
-Amazon EC2 provides a Query API. These requests are HTTP or HTTPS requests that use the
-HTTP verbs GET or POST and a Query parameter named Action. For more information about
-the API actions for Amazon EC2, see Actions in the Amazon EC2 API Reference.
-
-Pricing for Amazon EC2
-Amazon EC2 provides the following pricing options:
-Free Tier
-You can get started with Amazon EC2 for free. To explore the Free Tier options, see AWS Free
-Tier.
-On-Demand Instances
-Pay for the instances that you use by the second, with a minimum of 60 seconds, with no longterm commitments or upfront payments.
-Savings Plans
-You can reduce your Amazon EC2 costs by making a commitment to a consistent amount of
-usage, in USD per hour, for a term of 1 or 3 years.
-Reserved Instances
-You can reduce your Amazon EC2 costs by making a commitment to a speciﬁc instance
-conﬁguration, including instance type and Region, for a term of 1 or 3 years.
-Spot Instances
-Request unused EC2 instances, which can reduce your Amazon EC2 costs signiﬁcantly.
-Dedicated Hosts
-Reduce costs by using a physical EC2 server that is fully dedicated for your use, either OnDemand or as part of a Savings Plan. You can use your existing server-bound software licenses
-and get help meeting compliance requirements.
-On-Demand Capacity Reservations
-Reserve compute capacity for your EC2 instances in a speciﬁc Availability Zone for any duration
-of time.
-Pricing
-
-5
-
-Amazon Elastic Compute Cloud
-
-User Guide
-
-Per-second billing
-Removes the cost of unused minutes and seconds from your bill.
-For a complete list of charges and prices for Amazon EC2 and more information about the purchase
-models, see Amazon EC2 pricing.
-
-Estimates, billing, and cost optimization
-To create estimates for your AWS use cases, use the AWS Pricing Calculator.
-To estimate the cost of transforming Microsoft workloads to a modern architecture that uses
-open source and cloud-native services deployed on AWS, use the AWS Modernization Calculator for
-Microsoft Workloads.
-To see your bill, go to the Billing and Cost Management Dashboard in the AWS Billing and Cost
-Management console. Your bill contains links to usage reports that provide details about your bill.
-To learn more about AWS account billing, see AWS Billing and Cost Management User Guide.
-If you have questions concerning AWS billing, accounts, and events, contact AWS Support.
-To calculate the cost of a sample provisioned environment, see Cloud Economics Center. When
-calculating the cost of a provisioned environment, remember to include incidental costs such as
-snapshot storage for EBS volumes.
-You can optimize the cost, security, and performance of your AWS environment using AWS Trusted
-Advisor.
-You can use AWS Cost Explorer to analyze the cost and usage of your EC2 instances. You can view
-data up to the last 13 months, and forecast how much you are likely to spend for the next 12
-months. For more information, see Analyzing your costs and usage with AWS Cost Explorer in the
-AWS Cost Management User Guide.
-
-Resources
-• Amazon EC2 features
-• AWS re:Post
-• AWS Skill Builder
-• AWS Support
-Estimates, billing, and cost optimization
-
-6
-
-Amazon Elastic Compute Cloud
-
-User Guide
-
-• Hands-on Tutorials
-• Web Hosting
-• Windows on AWS
-
-Resources
-
-7
 
 Amazon Elastic Compute Cloud
 
@@ -774,5 +657,931 @@ Contents
 • Understand AMI billing information
 • AMI quotas in Amazon EC2
 20
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+AMI types and characteristics in Amazon EC2
+When you launch an instance, the AMI that you choose must be compatible with the instance type
+that you choose. You can select an AMI to use based on the following characteristics:
+• Region
+• Operating system
+• Processor architecture
+• Launch permissions
+• Root device type
+• Virtualization types
+
+Launch permissions
+Launch permissions determine who can use an AMI to launch instances. You can think of launch
+permissions as sharing an AMI—when you grant launch permissions, you're sharing the AMI
+with other users. Only the owner of an AMI can determine its availability by specifying launch
+permissions. Launch permissions fall into the following categories.
+Launch
+permission
+
+Description
+
+public
+
+The owner grants launch permissions to all AWS accounts.
+
+explicit
+
+The owner grants launch permissions to speciﬁc AWS accounts, organizat
+ions, or organizational units (OUs).
+
+implicit
+
+The owner has implicit launch permissions for an AMI.
+
+Amazon and the Amazon EC2 community provide a large selection of public AMIs. For more
+information, see Understand shared AMI usage in Amazon EC2. Developers can charge for their
+AMIs. For more information, see Paid AMIs in the AWS Marketplace for Amazon EC2 instances.
+
+Root device type
+All AMIs are categorized as either backed by Amazon EBS or backed by instance store.
+AMI characteristics
+
+21
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Amazon EBS-backed AMI – The root device for an instance launched from the AMI is an Amazon
+Elastic Block Store (Amazon EBS) volume created from an Amazon EBS snapshot. Supported for
+both Linux and Windows AMIs.
+• Amazon instance store-backed AMI – The root device for an instance launched from the AMI is an
+instance store volume created from a template stored in Amazon S3. Supported for Linux AMIs
+only. Windows AMIs do not support instance store for the root device.
+For more information, see Root volumes for your Amazon EC2 instances.
+Note
+Instance store-backed AMIs are considered end of life and are not recommended for new
+usage. They are only supported on the following older instance types: C1, C3, D2, I2, M1,
+M2, M3, R3, and X1.
+
+The following table summarizes the important diﬀerences when using the two types of AMIs.
+Characteristic
+
+Amazon EBS-backed AMI
+
+Amazon instance store-backed
+AMI
+
+Root device volume
+
+EBS volume
+
+Instance store volume
+
+Boot time for an
+instance
+
+Usually less than 1 minute
+
+Usually less than 5 minutes
+
+By default, the root volume
+is deleted when the instance
+terminates.* Data on any other
+EBS volumes persists after
+instance termination by default.
+
+Data on any instance store
+volumes persists only during the
+life of the instance.
+
+Can be in a stopped state. Even
+when the instance is stopped and
+not running, the root volume is
+persisted in Amazon EBS.
+
+Cannot be in a stopped state;
+instances are running or
+terminated.
+
+Data persistence
+
+Stopped state
+
+Root device type
+
+22
+
+Amazon Elastic Compute Cloud
+
+Characteristic
+
+Modiﬁcations
+
+Charges
+
+AMI creation/bundling
+
+User Guide
+
+Amazon EBS-backed AMI
+
+Amazon instance store-backed
+AMI
+
+The instance type, kernel, RAM
+disk, and user data can be
+changed while the instance is
+stopped.
+
+Instance attributes are ﬁxed for
+the life of an instance.
+
+You're charged for instance
+usage, EBS volume usage, and
+storing your AMI as an EBS snaps
+hot.
+
+You're charged for instance usage
+and storing your AMI in Amazon
+S3.
+
+Uses a single command/call
+
+Requires installation and use of
+AMI tools
+
+* By default, EBS root volumes have the DeleteOnTermination ﬂag set to true. For information
+about how to change this ﬂag so that the volume persists after termination, see Keep an Amazon
+EBS root volume after an Amazon EC2 instance terminates.
+** Supported with io2 EBS Block Express only. For more information, see Provisioned IOPS SSD
+Block Express volumes in the Amazon EBS User Guide.
+
+Determine the root device type of your AMI
+The AMI that you use to launch an EC2 instance determines the type of the root volume. The root
+volume of an EC2 instance is either an EBS volume or an instance store volume.
+Nitro-based instances support only EBS root volumes. The following previous generation instance
+types are the only instance types that support instance store root volumes: C1, C3, D2, I2, M1, M2,
+M3, R3, and X1.
+Console
+To determine the root device type of an AMI
+1.
+
+Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+
+Determine the AMI root device type
+
+23
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Amazon EC2 instances
+An Amazon EC2 instance is a virtual server in the AWS cloud environment. You have full control
+over your instance, from the time that you ﬁrst start it (referred to as launching an instance) until
+you delete it (referred to as terminating an instance). You can choose from a variety of operating
+systems when you launch your instance. You can connect to your instance and customize it to meet
+your needs. For example, you can conﬁgure the operating system, install operating system updates,
+and install applications on your instance.
+Amazon EC2 provides a wide range of instance types. You can choose an instance type that
+provides the compute resources, memory, storage, and network performance that you need to run
+your applications.
+With Amazon EC2, you pay only for what you use. Billing for your instance starts when you launch
+your instance and it transitions to the running state. Billing stops when you stop your instance and
+resumes when you start your instance. When you terminate your instance, billing stops when it
+transitions to the shutting down state.
+Amazon EC2 provides features that you can use to optimize the performance and the cost of
+your instances. For example, you can use Amazon EC2 Fleet or Amazon EC2 Auto Scaling to scale
+your capacity up or down as your instance utilization changes. You can reduce the costs for your
+instances using Spot Instances or Savings Plans.
+A managed instance is managed by a service provider, such as Amazon EKS Auto Mode. You can’t
+directly modify the settings of a managed instance. Managed instances are identiﬁed by a true
+value in the Managed ﬁeld. For more information, see Amazon EC2 managed instances.
+Features and tasks
+• Amazon EC2 instance types
+• Amazon EC2 managed instances
+• Amazon EC2 billing and purchasing options
+• Store instance launch parameters in Amazon EC2 launch templates
+• Launch an Amazon EC2 instance
+• Connect to your EC2 instance
+• Amazon EC2 instance state changes
+267
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Automatic instance recovery
+• Use instance metadata to manage your EC2 instance
+• Detect whether a host is an EC2 instance
+• Instance identity documents for Amazon EC2 instances
+• Precision clock and time synchronization on your EC2 instance
+• Manage device drivers for your EC2 instance
+• Conﬁgure your Amazon EC2 Windows instance
+• Upgrade an EC2 Windows instance to a newer version of Windows Server
+• Tutorial: Connect an Amazon EC2 instance to an Amazon RDS database
+
+Amazon EC2 instance types
+When you launch an instance, the instance type that you specify determines the hardware of the
+host computer used for your instance. Each instance type oﬀers diﬀerent compute, memory, and
+storage capabilities, and is grouped in an instance family based on these capabilities. Select an
+instance type based on the requirements of the application or software that you plan to run on
+your instance. For more information about features and use cases, see Amazon EC2 Instance Types.
+Amazon EC2 dedicates some resources of the host computer, such as CPU, memory, and instance
+storage, to a particular instance. Amazon EC2 shares other resources of the host computer, such as
+the network and the disk subsystem, among instances. If each instance on a host computer tries
+to use as much of one of these shared resources as possible, each receives an equal share of that
+resource. However, when a resource is underused, an instance can consume a higher share of that
+resource while it's available.
+Each instance type provides higher or lower minimum performance from a shared resource. For
+example, instance types with high I/O performance have a larger allocation of shared resources.
+Allocating a larger share of shared resources also reduces the variance of I/O performance. For
+most applications, moderate I/O performance is more than enough. However, for applications that
+require greater or more consistent I/O performance, consider an instance type with higher I/O
+performance.
+Contents
+• Available instance types
+• Hardware speciﬁcations
+Instance types
+
+268
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Hypervisor type
+• AMI virtualization types
+• Processors
+• Find an Amazon EC2 instance type
+• Get recommendations from EC2 instance type ﬁnder
+• Get EC2 instance recommendations from Compute Optimizer
+• Amazon EC2 instance type changes
+• Burstable performance instances
+• Performance acceleration with GPU instances
+• Amazon EC2 Mac instances
+• Amazon EBS-optimized instance types
+• CPU options for Amazon EC2 instances
+• AMD SEV-SNP for Amazon EC2 instances
+• Processor state control for Amazon EC2 Linux instances
+
+Available instance types
+Amazon EC2 provides a wide selection of instance types optimized to ﬁt diﬀerent use cases.
+Instance types comprise varying combinations of CPU, memory, storage, and networking capacity
+and give you the ﬂexibility to choose the appropriate mix of resources for your applications. Each
+instance type includes one or more instance sizes, allowing you to scale your resources to the
+requirements of your target workload.
+Instance type naming conventions
+Names are based on instance family, generation, processor family, capabilities, and size. For more
+information, see Naming conventions in the Amazon EC2 Instance Types Guide.
+Find an instance type
+To determine which instance types meet your requirements, such as supported Regions, compute
+resources, or storage resources, see Find an Amazon EC2 instance type and Amazon EC2 instance
+type speciﬁcations in the Amazon EC2 Instance Types Guide.
+Available instance types
+
+269
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Launch a container instance using an Inf1 or Inf2 instance and an Amazon ECS-optimized AMI.
+For more information, see Amazon Linux 2 (Inferentia) AMIs in the Amazon Elastic Container
+Service Developer Guide.
+• Create an Amazon EKS cluster with nodes running Inf1 instances. For more information, see
+Inferentia support in the Amazon EKS User Guide.
+
+Find an Amazon EC2 instance type
+Before you can launch an instance, you must select an instance type to use. The instance type
+that you choose might depend on the resources that your workload requires, such as compute,
+memory, or storage resources. It can be beneﬁcial to identify several instance types that might suit
+your workload and evaluate their performance in a test environment. There is no substitute for
+measuring the performance of your application under load.
+You can get suggestions and guidance for EC2 instance types using the EC2 instance type ﬁnder.
+For more information, see the section called “EC2 instance type ﬁnder”.
+If you already have running EC2 instances, you can use AWS Compute Optimizer to get
+recommendations about the instance types that you should use to improve performance,
+save money, or both. For more information, see the section called “Compute Optimizer
+recommendations”.
+Tasks
+• Find an instance type using the console
+• Describe an instance type using the AWS CLI
+• Find an instance type using the AWS CLI
+• Find an instance type using the Tools for PowerShell
+
+Find an instance type using the console
+You can ﬁnd an instance type that meets your needs using the Amazon EC2 console.
+To ﬁnd an instance type using the console
+1.
+
+Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+
+2.
+
+From the navigation bar, select the Region in which to launch your instances. You can select
+any Region that's available to you, regardless of your location.
+
+Find an instance type
+
+274
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+3.
+
+In the navigation pane, choose Instance Types.
+
+4.
+
+(Optional) Choose the preferences (gear) icon to select which instance type attributes to
+display, such as On-Demand Linux pricing, and then choose Conﬁrm. Alternatively, select the
+name of an instance type to open its details page and view all attributes available through
+the console. The console does not display all the attributes available through the API or the
+command line.
+
+5.
+
+Use the instance type attributes to ﬁlter the list of displayed instance types to only the
+instance types that meet your needs. For example, you can ﬁlter on the following attributes:
+• Availability zones – The name of the Availability Zone, Local Zone, or Wavelength Zone. For
+more information, see the section called “Regions and Zones”.
+• vCPUs or Cores – The number of vCPUs or cores.
+• Memory (GiB) – The memory size, in GiB.
+• Network performance – The network performance, in Gigabits.
+• Local instance storage – Indicates whether the instance type has local instance storage
+(true | false).
+
+6.
+
+(Optional) To see a side-by-side comparison, select the checkbox for multiple instance types.
+The comparison is displayed at the bottom of the screen.
+
+7.
+
+(Optional) To save the list of instance types to a comma-separated values (.csv) ﬁle for further
+review, choose Actions, Download list CSV. The ﬁle includes all instance types that match the
+ﬁlters you set.
+
+8.
+
+(Optional) To launch instances using an instance type that meet your needs, select the
+checkbox for the instance type and choose Actions, Launch instance. For more information,
+see Launch an EC2 instance using the launch instance wizard in the console.
+
+Describe an instance type using the AWS CLI
+You can use the describe-instance-types command to describe a speciﬁc instance type.
+To fully describe an instance type
+The following command displays all available details for the speciﬁed instance type. The output is
+lengthy, so it is omitted here.
+aws ec2 describe-instance-types \
+--instance-types t2.micro \
+Find an instance type
+
+275
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+EC2 Fleet and Spot Fleet
+EC2 Fleet and Spot Fleet are designed to be a useful way to launch a ﬂeet of tens, hundreds,
+or thousands of Amazon EC2 instances in a single operation. Each instance in a ﬂeet is either
+conﬁgured by a launch template or a set of launch parameters that you conﬁgure manually at
+launch.
+Topics
+• Features and beneﬁts
+• Which is the best ﬂeet method to use?
+• Conﬁguration options for your EC2 Fleet or Spot Fleet
+• Work with EC2 Fleet
+• Work with Spot Fleet
+• Monitor your EC2 Fleet or Spot Fleet
+• Tutorials for EC2 Fleet
+• Example CLI conﬁgurations for EC2 Fleet
+• Example CLI conﬁgurations Spot Fleet
+• Quotas for EC2 Fleet and Spot Fleet
+
+Features and beneﬁts
+Fleets provide the following features and beneﬁts, enabling you to maximize cost savings and
+optimize availability and performance when running applications on multiple EC2 instances.
+Multiple instance types
+A ﬂeet can launch multiple instance types, ensuring it isn't dependent on the availability of any
+single instance type. This increases the overall availability of instances in your ﬂeet.
+Distributing instances across Availability Zones
+A ﬂeet automatically attempts to distribute instances evenly across multiple Availability Zones
+for high availability. This provides resiliency in case an Availability Zone becomes unavailable.
+
+Features and beneﬁts
+
+1933
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Multiple purchasing options
+A ﬂeet can launch multiple purchase options (Spot and On-Demand Instances), allowing you to
+optimize costs through Spot Instance usage. You can also take advantage of Reserved Instance
+and Savings Plans discounts by using them in conjunction with On-Demand Instances in the
+ﬂeet.
+Automated replacement of Spot Instances
+If your ﬂeet includes Spot Instances, it can automatically request replacement Spot capacity if
+your Spot Instances are interrupted. Through Capacity Rebalancing, a ﬂeet can also monitor and
+proactively replace your Spot Instances that are at an elevated risk of interruption.
+Reserve On-Demand capacity
+A ﬂeet can use an On-Demand Capacity Reservation to reserve On-Demand capacity. A ﬂeet can
+also include Capacity Blocks for ML, allowing you to reserve GPU instances on a future date to
+support short duration machine learning (ML) workloads.
+
+Which is the best ﬂeet method to use?
+As a general best practice, we recommend launching ﬂeets of Spot and On-Demand Instances with
+Amazon EC2 Auto Scaling because it provides additional features you can use to manage your ﬂeet.
+The list of additional features includes automatic health check replacements for both Spot and OnDemand Instances, application-based health checks, and an integration with Elastic Load Balancing
+to ensure an even distribution of application traﬃc to your healthy instances. You can also use
+Auto Scaling groups when you use AWS services such as Amazon ECS, Amazon EKS (self-managed
+node groups), and Amazon VPC Lattice. For more information, see the Amazon EC2 Auto Scaling
+User Guide.
+If you can't use Amazon EC2 Auto Scaling, then you might consider using EC2 Fleet or Spot Fleet.
+EC2 Fleet and Spot Fleet oﬀer the same core functionality. However, EC2 Fleet is only available
+using a command line and does not provide console support. Spot Fleet provides console support,
+but is based on a legacy API with no planned investment.
+Use the following table to determine which ﬂeet method to use.
+
+Which ﬂeet method to use?
+
+1934
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Fleet method
+
+When to use?
+
+Use case
+
+Amazon EC2 Auto Scaling
+
+• You need multiple
+instances with either a
+single conﬁguration or a
+mixed conﬁguration.
+
+Create an Auto Scaling group
+that manages the lifecycle of
+your instances while maintaini
+ng the desired number of
+instances. Supports horizontal
+scaling (adding more instances
+) between speciﬁed minimum
+
+• You want to automate the
+lifecycle management of
+your instances.
+EC2 Fleet
+
+• You need multiple
+instances with either a
+single conﬁguration or a
+mixed conﬁguration.
+• You want to self-manage
+your instance lifecycle.
+• If you don’t need auto
+scaling, we recommend
+that you use an instant
+type EC2 Fleet.
+
+and maximum limits.
+Create an instant ﬂeet of
+both On-Demand Instances
+and Spot Instances in a single
+operation, with multiple
+launch speciﬁcations that
+vary by instance type, AMI,
+Availability Zone, or subnet.
+The Spot Instance allocation
+strategy defaults to lowestprice per unit, but we
+recommend changing it to
+price-capacity-opt
+imized .
+
+Spot Fleet
+
+• We strongly discourage
+using Spot Fleet because
+it is based on a legacy API
+with no planned investmen
+t.
+
+Use Spot Fleet only if you
+need console support for a
+use case for when you would
+use EC2 Fleet.
+
+• If you want to manage
+your instance lifecycle,
+rather use EC2 Fleet.
+• If you don't want to
+manage your instance
+
+Which ﬂeet method to use?
+
+1935
+
+Amazon Elastic Compute Cloud
+
+Fleet method
+
+User Guide
+
+When to use?
+
+Use case
+
+lifecycle, rather use an
+Auto Scaling group.
+
+Conﬁguration options for your EC2 Fleet or Spot Fleet
+When planning your EC2 Fleet or Spot Fleet, we recommend that you consider the following
+options when deciding how to conﬁgure your ﬂeet.
+
+Conﬁgura
+tion
+option
+
+Question
+
+Documentation
+
+Fleet
+request
+type
+
+Do you want a ﬂeet that submits a one-time
+request for the desired target capacity, or a ﬂeet
+that maintains target capacity over time?
+
+EC2 Fleet and Spot Fleet
+request types
+
+Spot
+Instances
+
+Do you plan to include Spot Instances in your
+ﬂeet? Review the Spot best practices and use
+them when you plan your ﬂeet so that you can
+provision the instances at the lowest possible
+price.
+
+Best practices for Amazon
+EC2 Spot
+
+Spending
+limit for
+your ﬂeet
+
+Do you want to limit how much you'll pay for
+your ﬂeet per hour?
+
+Set a spending limit for your
+EC2 Fleet or Spot Fleet
+
+Instance
+types and
+attribute
+-based
+instance
+type
+selection
+
+Do you want to specify the instance types in
+your ﬂeet, or let Amazon EC2 select the instance
+types that meet your application requirements?
+
+Specify attributes for instance
+type selection for EC2 Fleet
+or Spot Fleet
+
+Conﬁguration options
+
+1936
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Conﬁgura
+tion
+option
+
+Question
+
+Documentation
+
+Instance
+weighting
+
+Do you want to assign weights to each instance
+type to represent their compute capacity and
+performance, so that Amazon EC2 can select any
+combination of available instance types to fulﬁl
+your desired target capacity?
+
+Use instance weighting to
+manage cost and performanc
+e of your EC2 Fleet or Spot
+Fleet
+
+Allocation
+strategies
+
+Do you want to decide whether to optimize for
+available capacity, price, or instance types to use
+for the Spot Instances and On-Demand Instances
+in your ﬂeet?
+
+Use allocation strategies to
+determine how EC2 Fleet or
+Spot Fleet fulﬁlls Spot and
+On-Demand capacity
+
+Capacity
+Rebalanci
+ng
+
+Do you want your ﬂeet to automatically replace
+at-risk Spot Instances?
+
+Use Capacity Rebalancing in
+EC2 Fleet and Spot Fleet to
+replace at-risk Spot Instances
+
+OnDemand
+Capacity
+Reservati
+on
+
+Do you want to reserve capacity for the OnDemand Instances in your ﬂeet?
+
+Use Capacity Reservations to
+reserve On-Demand capacity
+in EC2 Fleet
+
+EC2 Fleet and Spot Fleet request types
+The request type for an EC2 Fleet or Spot Fleet determines whether the request is synchronous or
+asynchronous, and whether it is a one-time request for the desired target capacity or an ongoing
+eﬀort to maintain the capacity over time. When conﬁguring your ﬂeet, you must specify the
+request type.
+Both EC2 Fleet and Spot Fleet oﬀer two request types: request and maintain. In addition, EC2
+Fleet oﬀers a third request type called instant.
+
+Request types
+
+1937
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Fleet request types
+instant (EC2 Fleet only)
+If you conﬁgure the request type as instant, EC2 Fleet places a synchronous one-time request
+for your desired capacity. In the API response, it returns the instances that launched and
+provides errors for those instances that could not be launched. For more information, see
+Conﬁgure an EC2 Fleet of type instant.
+request
+If you conﬁgure the request type as request, the ﬂeet places an asynchronous one-time
+request for your desired capacity. If capacity diminishes due to Spot interruptions, the ﬂeet does
+not attempt to replenish Spot Instances, nor does it submit requests in alternative Spot capacity
+pools if capacity is unavailable. When creating a Spot Fleet of type request using the console,
+clear the Maintain target capacity checkbox.
+maintain (default)
+If you conﬁgure the request type as maintain, the ﬂeet places an asynchronous request for
+your desired capacity, and maintains it by automatically replenishing any interrupted Spot
+Instances. When creating a Spot Fleet of type maintain using the console, select the Maintain
+target capacity checkbox
+
+Conﬁgure an EC2 Fleet of type instant
+The EC2 Fleet of type instant is a synchronous one-time request that makes only one attempt to
+launch your desired capacity. The API response lists the instances that launched, along with errors
+for those instances that could not be launched. There are several beneﬁts to using an EC2 Fleet of
+type instant, which are described in this article. Example conﬁgurations are provided at the end of
+the article.
+For workloads that need a launch-only API to launch EC2 instances, you can use the RunInstances
+API. However, with RunInstances, you can only launch On-Demand Instances or Spot Instances, but
+not both in the same request. Furthermore, when you use RunInstances to launch Spot Instances,
+your Spot Instance request is limited to one instance type and one Availability Zone. This targets
+a single Spot capacity pool (a set of unused instances with the same instance type and Availability
+Zone). If the Spot capacity pool does not have suﬃcient Spot Instance capacity for your request,
+the RunInstances call fails.
+Request types
+
+1938
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Instead of using RunInstances to launch Spot Instances, we recommend that you rather use the
+CreateFleet API with the type parameter set to instant for the following beneﬁts:
+• Launch On-Demand Instances and Spot Instances in one request. An EC2 Fleet can launch OnDemand Instances, Spot Instances, or both. The request for Spot Instances is fulﬁlled if there is
+available capacity and the maximum price per hour for your request exceeds the Spot price.
+• Increase the availability of Spot Instances. By using an EC2 Fleet of type instant, you can
+launch Spot Instances following Spot best practices with the resulting beneﬁts:
+• Spot best practice: Be ﬂexible about instance types and Availability Zones.
+Beneﬁt: By specifying several instance types and Availability Zones, you increase the number
+of Spot capacity pools. This gives the Spot service a better chance of ﬁnding and allocating
+your desired Spot compute capacity. A good rule of thumb is to be ﬂexible across at least 10
+instance types for each workload and make sure that all Availability Zones are conﬁgured for
+use in your VPC.
+• Spot best practice: Use the price-capacity-optimized allocation strategy.
+Beneﬁt: The price-capacity-optimized allocation strategy identiﬁes instances from the
+most-available Spot capacity pools, and then automatically provisions instances from the
+lowest priced of these pools. Because your Spot Instance capacity is sourced from pools with
+optimal capacity, this decreases the possibility that your Spot Instances will be interrupted
+when Amazon EC2 needs the capacity back.
+• Get access to a wider set of capabilities. For workloads that need a launch-only API, and where
+you prefer to manage the lifecycle of your instance rather than let EC2 Fleet manage it for
+you, use the EC2 Fleet of type instant instead of the RunInstances API. EC2 Fleet provides
+a wider set of capabilities than RunInstances, as demonstrated in the following examples.
+For all other workloads, you should use Amazon EC2 Auto Scaling because it supplies a more
+comprehensive feature set for a wide variety of workloads, like ELB-backed applications,
+containerized workloads, and queue processing jobs.
+You can use EC2 Fleet of type instant to launch instances into Capacity Blocks. For more
+information, see Tutorial: Conﬁgure your EC2 Fleet to launch instances into Capacity Blocks.
+AWS services like Amazon EC2 Auto Scaling and Amazon EMR use EC2 Fleet of type instant to
+launch EC2 instances.
+
+Request types
+
+1939
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Prerequisites for EC2 Fleet of type instant
+For the prerequisites for creating an EC2 Fleet, see EC2 Fleet prerequisites.
+How instant EC2 Fleet works
+When working with an EC2 Fleet of type instant, the sequence of events is as follows:
+1. Conﬁgure: Conﬁgure the CreateFleet request type as instant. For more information, see
+Create an EC2 Fleet. Note that after you make the API call, you can't modify it.
+2. Request: When you make the API call, Amazon EC2 places a synchronous one-time request for
+your desired capacity.
+3. Response: The API response lists the instances that launched, along with errors for those
+instances that could not be launched.
+4. Describe: You can describe your EC2 Fleet, list the instances associated with your EC2 Fleet, and
+view the history of your EC2 Fleet.
+5. Terminate instances: You can terminate the instances at any time.
+6. Delete ﬂeet request: The ﬂeet request can be deleted either manually or automatically:
+• Manual: You can delete the ﬂeet request after your instances launch.
+Note that a deleted instant ﬂeet with running instances is not supported. When you delete
+an instant ﬂeet, Amazon EC2 automatically terminates all its instances. For ﬂeets with
+more than 1000 instances, the deletion request might fail. If your ﬂeet has more than 1000
+instances, ﬁrst terminate most of the instances manually, leaving 1000 or fewer. Then delete
+the ﬂeet, and the remaining instances will be terminated automatically.
+• Automatic: Amazon EC2 deletes the ﬂeet request some time after either:
+• All the instances are terminated.
+• The ﬂeet fails to launch any instances.
+Examples
+The following examples show how to use EC2 Fleet of type instant for diﬀerent use cases. For
+more information about using the EC2 CreateFleet API parameters, see CreateFleet in the Amazon
+EC2 API Reference.
+Examples
+• Example 1: Launch Spot Instances with the capacity-optimized allocation strategy
+Request types
+
+1940
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+Networking in Amazon EC2
+Amazon VPC enables you to launch AWS resources, such as Amazon EC2 instances, into a virtual
+network dedicated to your AWS account, known as a virtual private cloud (VPC). When you launch
+an instance, you can select a subnet from the VPC. The instance is conﬁgured with a primary
+network interface, which is a logical virtual network card. The instance receives a primary private IP
+address from the IPv4 address of the subnet, and it is assigned to the primary network interface.
+You can control whether the instance receives a public IP address from Amazon's pool of public
+IP addresses. The public IP address of an instance is associated with your instance only until it is
+stopped or terminated. If you require a persistent public IP address, you can allocate an Elastic IP
+address for your AWS account and associate it with an instance or a network interface. An Elastic IP
+address remains associated with your AWS account until you release it, and you can move it from
+one instance to another as needed. You can bring your own IP address range to your AWS account,
+where it appears as an address pool, and then allocate Elastic IP addresses from your address pool.
+To increase network performance and reduce latency, you can launch instances in a placement
+group. You can get signiﬁcantly higher packet per second (PPS) performance using enhanced
+networking. You can accelerate high performance computing and machine learning applications
+using an Elastic Fabric Adapter (EFA), which is a network device that you can attach to a supported
+instance type.
+Features
+• Regions and Zones
+• Amazon EC2 instance IP addressing
+• EC2 instance hostnames and domains
+• Bring your own IP addresses (BYOIP) to Amazon EC2
+• Elastic IP addresses
+• Elastic network interfaces
+• Amazon EC2 instance network bandwidth
+• Enhanced networking on Amazon EC2 instances
+• Elastic Fabric Adapter for AI/ML and HPC workloads on Amazon EC2
+• Amazon EC2 instance topology
+• Placement groups for your Amazon EC2 instances
+2176
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+• Network maximum transmission unit (MTU) for your EC2 instance
+• Virtual private clouds for your EC2 instances
+
+Regions and Zones
+Amazon EC2 is hosted in multiple locations world-wide. These locations are composed of AWS
+Regions, Availability Zones, Local Zones, AWS Outposts, and Wavelength Zones.
+• Regions are separate geographic areas.
+• Availability Zones are multiple, isolated locations within each Region.
+• Local Zones provide you with the ability to place resources, such as compute and storage, in
+multiple locations closer to your end users.
+• Wavelength Zones provide you with the ability to build applications that deliver ultra-low
+latencies to 5G devices and end users. Wavelength deploys standard AWS compute and storage
+services to the edge of telecommunication carriers' 5G networks.
+• AWS Outposts brings native AWS services, infrastructure, and operating models to virtually any
+data center, colocation space, or on-premises facility.
+AWS operates state-of-the-art, highly available data centers. Although rare, failures can occur that
+aﬀect the availability of instances that are in the same location. If you host all of your instances in a
+single location that is aﬀected by a failure, none of your instances would be available.
+For more information, see AWS Global Infrastructure.
+Contents
+• Regions
+• Availability Zones
+• Local Zones
+• Wavelength Zones
+• AWS Outposts
+
+Regions
+Each Region is designed to be isolated from the other Regions. This achieves the greatest possible
+fault tolerance and stability.
+Regions and Zones
+
+2177
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+When you launch an instance, select a Region that puts your instances close to speciﬁc customers,
+or that meets the legal or other requirements that you have. You can launch instances in multiple
+Regions.
+When you view your resources, you see only the resources that are tied to the Region that you
+speciﬁed. This is because Regions are isolated from each other, and we don't automatically
+replicate resources across Regions.
+
+Available Regions
+For the list of available Regions, see AWS Regions.
+
+Regional endpoints for Amazon EC2
+When you work with an instance using the command line interface or API actions, you must specify
+its Regional endpoint. For more information about the Regions and endpoints for Amazon EC2, see
+Amazon EC2 service endpoints in the Amazon EC2 Developer Guide.
+For more information, see AWS Regions in the AWS Regions and Availability Zones User Guide.
+
+Availability Zones
+Each Region has multiple, isolated locations known as Availability Zones. The code for an
+Availability Zone is its Region code followed by a letter identiﬁer. For example, us-east-1a.
+By launching EC2 instances in multiple Availability Zones, you can protect your applications from
+the failure of a single location in the Region.
+The following diagram illustrates multiple Availability Zones in an AWS Region. Availability Zone A
+and Availability Zone B each have one subnet, and each subnet has EC2 instances. Availability Zone
+C has no subnets, therefore you can't launch instances into this Availability Zone.
+
+Availability Zones
+
+2178
+
+Amazon Elastic Compute Cloud
+
+User Guide
+
+For more information, see Virtual private clouds for your EC2 instances.
+
+Availability Zones by Region
+For the list of Availability Zones by Region, see AWS Availability Zones.
+
+Instances in Availability Zones
+When you launch an instance, you select a Region and a virtual private cloud (VPC). Then, you
+can either select a subnet from one of the Availability Zones or let us choose a subnet for you.
+When you launch your initial instances, we recommend that you let us select an Availability Zone
+for you based on system health and available capacity. If you launch additional instances, specify
+an Availability Zone only if your new instances must be close to, or separated from, your existing
+instances.
+If you distribute instances across multiple Availability Zones and an instance fails, you can design
+your application so that an instance in another Availability Zone handles requests instead.
+For more information, see AWS Availability Zones in the AWS Regions and Availability Zones User
+Guide.
+Availability Zones
+
+2179
 
 

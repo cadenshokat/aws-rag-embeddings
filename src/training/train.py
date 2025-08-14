@@ -10,27 +10,6 @@ from src.utils.config import CFG
 from src.utils.paths import TRAIN_JSON, TEST_JSON
 from src.eval.ir_eval import build_eval
 
-def _precision_and_optim():
-    """Pick safe precision/optimizer for the current device."""
-    use_cuda = torch.cuda.is_available()
-    use_mps  = getattr(torch.backends, "mps", None) and torch.backends.mps.is_available()
-
-    cfg = dict(fp16=False, bf16=False, tf32=False, optim="adamw_torch")
-
-    if use_cuda:
-        # TF32 + fused adamw only on NVIDIA GPUs
-        cfg["tf32"] = True
-        try:
-            cfg["bf16"] = torch.cuda.is_bf16_supported()
-        except Exception:
-            cfg["bf16"] = False
-        maj, _ = torch.cuda.get_device_capability()
-        cfg["optim"] = "adamw_torch_fused" if maj >= 8 else "adamw_torch"
-
-    # MPS/CPU: stick to fp32; fused/TF32/bf16 unsupported in HF trainer
-    return cfg, use_cuda
-
-
 def main():
     device = "cuda" if torch.cuda.is_available() else ("mps" if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available() else "cpu")
 
@@ -54,12 +33,6 @@ def main():
     base_loss = MultipleNegativesRankingLoss(model)
     train_loss = MatryoshkaLoss(model, base_loss, matryoshka_dims=list(CFG.matryoshka_dims))
 
-    prec_optim, on_cuda = _precision_and_optim()
-    # Smaller batches on CPU/MPS
-    train_bs = 32 if on_cuda else 8
-    eval_bs  = 16 if on_cuda else 8
-    grad_acc = 16 if on_cuda else 4   # keeps global batch reasonable
-
     args = SentenceTransformerTrainingArguments(
         output_dir=CFG.output_dir,
         num_train_epochs=4,
@@ -69,9 +42,9 @@ def main():
         warmup_ratio=0.1,
         learning_rate=2e-5,
         lr_scheduler_type="cosine",
-        optim=prec_optim["optim"],
-        tf32=prec_optim["optim"],
-        bf16=["bf16"],
+        optim="adamw_torch_fused",
+        tf32=True,
+        bf16=True,
         batch_sampler=BatchSamplers.NO_DUPLICATES,
         eval_strategy="epoch",
         save_strategy="epoch",

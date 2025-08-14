@@ -206,4 +206,8 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+dataset
 data/
+*.jsonl
+*.txt
+*.json

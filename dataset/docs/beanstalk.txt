@@ -96,12 +96,6 @@ Estimated duration: 35-45 minutes
 
 Developer Guide
 
-6
-
-AWS Elastic Beanstalk
-
-Developer Guide
-
 What you will build
 Your ﬁrst Elastic Beanstalk application will consist of a single Amazon EC2 environment running
 the PHP sample on a PHP managed platform.
@@ -316,16 +310,6 @@ Step 2 - Deploy your application
 
 Developer Guide
 
-After all of the resources are deployed, the environment's health should change to Ok.
-
-Step 2 - Deploy your application
-
-12
-
-AWS Elastic Beanstalk
-
-Developer Guide
-
 Your application is ready!
 After you see your application health change to Ok, you can browse to your web
 application's website.
@@ -396,272 +380,603 @@ Step 3 - Explore the environment
 
 Developer Guide
 
-• Events – View an updating list of information and error messages from the Elastic Beanstalk
-service and other services for resources in your environment.
-• Health – View status and detailed health information for the Amazon EC2 instances running your
-application.
-• Logs – Retrieve and download logs from the Amazon EC2 in your environment. You can retrieve
-full logs or recent activity. The retrieved logs are available for 15 minutes.
-• Monitoring – View statistics for the environment, such as average latency and CPU utilization.
-• Alarms – View and edit alarms that are conﬁgured for environment metrics.
-• Managed updates – View information about upcoming and completed managed platform
-updates and instance replacement.
-• Tags – View and edit key-value pairs that are applied to your environment.
+Understanding concepts in Elastic Beanstalk
+Becoming familiar with the concepts and terms will help you gain an understanding needed for
+deploying your applications with Elastic Beanstalk.
+
+142
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+Application
+An Elastic Beanstalk application is a container for Elastic Beanstalk components, including
+environments, versions, and environment conﬁgurations. Within an Elastic Beanstalk application,
+you manage all the resources relevant to running your code.
+
+Application version
+In Elastic Beanstalk, an application version refers to a speciﬁc, labeled iteration of deployable code
+for a web application. An application version points to an Amazon Simple Storage Service (Amazon
+S3) object that contains the deployable code, such as a Java WAR ﬁle.
+An application version is part of an application. Applications can have many versions and each
+application version is unique. In a running environment, you can deploy any application version you
+already uploaded to the application, or you can upload and immediately deploy a new application
+version. For example, you could upload multiple application versions to test diﬀerences between
+them.
+
+Environment
+An environment is a collection of AWS resources running an application version. Each environment
+runs only one application version at a time, however, you can run the same application version
+or diﬀerent application versions in many environments simultaneously. When you create an
+environment, Elastic Beanstalk provisions the resources needed in your AWS account to run the
+application version you speciﬁed.
+
+Environment tier
+When you launch an Elastic Beanstalk environment, you ﬁrst choose an environment tier. The
+environment tier designates the type of application that the environment runs and determines
+what resources Elastic Beanstalk provisions to support it. An application that serves HTTP requests
+runs in a web server environment tier. A backend environment that pulls tasks from an Amazon
+Simple Queue Service (Amazon SQS) queue runs in a worker environment tier.
+
+Environment conﬁguration
+An environment conﬁguration identiﬁes a collection of parameters and settings that deﬁne
+how an environment and its associated resources behave. When you update an environment’s
+Application
+
+143
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+conﬁguration settings, Elastic Beanstalk automatically applies the changes to existing resources or
+deletes and deploys new resources (depending on the type of change).
+
+Saved conﬁguration
+A saved conﬁguration is a template that you can use as a starting point for creating unique
+environment conﬁgurations. You can create and modify saved conﬁgurations, and apply them to
+environments, using the Elastic Beanstalk console, EB CLI, AWS CLI, or API. The API and the AWS
+CLI refer to saved conﬁgurations as conﬁguration templates.
+
+Platform
+A platform is a combination of an operating system, programming language runtime, web server,
+application server, and Elastic Beanstalk components. You design and target your web application
+to a platform. Elastic Beanstalk provides a variety of platforms on which you can build your
+applications.
+For details, see Elastic Beanstalk platforms.
+
+Elastic Beanstalk web server environments
+The following diagram shows an example Elastic Beanstalk architecture for a web server
+environment tier, and shows how the components in that type of environment tier work together.
+
+Saved conﬁguration
+
+144
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+The environment is the heart of the application. In the diagram, the environment is shown within
+the top-level solid line. When you create an environment, Elastic Beanstalk provisions the resources
+required to run your application. AWS resources created for an environment include one elastic
+load balancer (ELB in the diagram), an Auto Scaling group, and one or more Amazon Elastic
+Compute Cloud (Amazon EC2) instances.
+Every environment has a CNAME (URL) that points to a load balancer. The environment
+has a URL, such as myapp.us-west-2.elasticbeanstalk.com. This URL is aliased in
+Amazon Route 53 to an Elastic Load Balancing URL—something like abcdef-123456.uswest-2.elb.amazonaws.com—by using a CNAME record. Amazon Route 53 is a highly available
+and scalable Domain Name System (DNS) web service. It provides secure and reliable routing to
+your infrastructure. Your domain name that you registered with your DNS provider will forward
+requests to the CNAME.
+The load balancer sits in front of the Amazon EC2 instances, which are part of an Auto Scaling
+group. Amazon EC2 Auto Scaling automatically starts additional Amazon EC2 instances to
+accommodate increasing load on your application. If the load on your application decreases,
+Amazon EC2 Auto Scaling stops instances, but always leaves at least one instance running.
+The software stack running on the Amazon EC2 instances is dependent on the container type.
+A container type deﬁnes the infrastructure topology and software stack to be used for that
+environment. For example, an Elastic Beanstalk environment with an Apache Tomcat container uses
+the Amazon Linux operating system, Apache web server, and Apache Tomcat software. For a list of
+supported container types, see Elastic Beanstalk supported platforms. Each Amazon EC2 instance
+that runs your application uses one of these container types. In addition, a software component
+called the host manager (HM) runs on each Amazon EC2 instance. The host manager is responsible
+for the following:
+• Deploying the application
+• Aggregating events and metrics for retrieval via the console, the API, or the command line
+• Generating instance-level events
+• Monitoring the application log ﬁles for critical errors
+• Monitoring the application server
+• Patching instance components
+• Rotating your application's log ﬁles and publishing them to Amazon S3
+
+Web server environments
+
+145
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+The host manager reports metrics, errors and events, and server instance status, which are
+available via the Elastic Beanstalk console, APIs, and CLIs.
+The Amazon EC2 instances shown in the diagram are part of one security group. A security group
+deﬁnes the ﬁrewall rules for your instances. By default, Elastic Beanstalk deﬁnes a security
+group, which allows everyone to connect using port 80 (HTTP). You can deﬁne more than one
+security group. For example, you can deﬁne a security group for your database server. For more
+information about Amazon EC2 security groups and how to conﬁgure them for your Elastic
+Beanstalk application, see EC2 security groups.
+
+Elastic Beanstalk worker environments
+AWS resources created for a worker environment tier include an Auto Scaling group, one or more
+Amazon EC2 instances, and an IAM role. For the worker environment tier, Elastic Beanstalk also
+creates and provisions an Amazon SQS queue if you don’t already have one. When you launch a
+worker environment, Elastic Beanstalk installs the necessary support ﬁles for your programming
+language of choice and a daemon on each EC2 instance in the Auto Scaling group. The daemon
+reads messages from an Amazon SQS queue. The daemon sends data from each message that
+it reads to the web application running in the worker environment for processing. If you have
+multiple instances in your worker environment, each instance has its own daemon, but they all read
+from the same Amazon SQS queue.
+The following diagram shows the diﬀerent components and their interactions across environments
+and AWS services.
+
+Worker environments
+
+146
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+Amazon CloudWatch is used for alarms and health monitoring. For more information, go to Basic
+health reporting.
+For details about how the worker environment tier works, see Elastic Beanstalk worker
+environments.
+
+Design considerations for your Elastic Beanstalk applications
+Because applications deployed using AWS Elastic Beanstalk run on AWS Cloud resources, you
+should keep several conﬁguration factors in mind to optimize your applications: scalability, security,
+persistent storage, fault tolerance, content delivery, software updates and patching, and connectivity.
+Each of these are covered separately in this topic. For a comprehensive list of technical AWS
+whitepapers, covering topics such as architecture, as well as security and economics, see AWS Cloud
+Computing Whitepapers.
+
+Design considerations
+
+147
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+Scalability
+When operating in a physical hardware environment, in contrast to a cloud environment, you can
+approach scalability in one of either two ways. Either you can scale up through vertical scaling
+or you can scale out through horizontal scaling. The scale-up approach requires that you invest
+in powerful hardware, which can support the increasing demands of your business. The scaleout approach requires that you follow a distributed model of investment. As such, your hardware
+and application acquisitions can be more targeted, your data sets are federated, and your design
+is service oriented. The scale-up approach can be expensive, and there's also the risk that your
+demand could outgrow your capacity. In this regard, the scale-out approach is usually more
+eﬀective. However, when using it, you must be able to predict demand at regular intervals and
+deploy infrastructure in chunks to meet that demand. As a result, this approach can often lead to
+unused capacity and might require some careful monitoring.
+By migrating to the cloud, you can make your infrastructure align well with demand by leveraging
+the elasticity of cloud. Elasticity helps to streamline resource acquisition and release. With it,
+your infrastructure can rapidly scale in and scale out as demand ﬂuctuates. To use it, conﬁgure
+your Auto Scaling settings to scale up or down based on the metrics for the resources in your
+environment. For example, you can set metrics such as server utilization or network I/O. You can
+use Auto Scaling for compute capacity to be added automatically whenever usage rises and for it
+to be removed whenever usage drops. You can publish system metrics (for example, CPU, memory,
+disk I/O, and network I/O) to Amazon CloudWatch. Then, you can use CloudWatch to conﬁgure
+alarms to trigger Auto Scaling actions or send notiﬁcations based on these metrics. For instructions
+on how to conﬁgure Auto Scaling, see Auto Scaling your Elastic Beanstalk environment instances.
+We also recommend that you design all your Elastic Beanstalk applications as stateless as possible,
+using loosely coupled, fault-tolerant components that can be scaled out as needed. For more
+information about designing scalable application architectures for AWS, see AWS Well-Architected
+Framework.
+
+Security
+Security on AWS is a shared responsibility. Amazon Web Services protects the physical resources
+in your environment and ensures that the Cloud is a safe place for you to run applications. You're
+responsible for the security of data coming in and out of your Elastic Beanstalk environment and
+the security of your application.
+Conﬁgure SSL to protect information that ﬂows between your application and clients. To conﬁgure
+SSL, you need a free certiﬁcate from AWS Certiﬁcate Manager (ACM). If you already have a
+Scalability
+
+148
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+certiﬁcate from an external certiﬁcate authority (CA), you can use ACM to import that your
+certiﬁcate. Otherwise, you can import it using the AWS CLI.
+If ACM isn't available in your AWS Region, you can purchase a certiﬁcate from an external CA, such
+as VeriSign or Entrust. Then, use the AWS Command Line Interface (AWS CLI) to upload a thirdparty or self-signed certiﬁcate and private key to AWS Identity and Access Management (IAM). The
+public key of the certiﬁcate authenticates your server to the browser. It also serves as the basis for
+creating the shared session key that encrypts the data in both directions. For instructions on how
+to create, upload, and assign an SSL certiﬁcate to your environment, see Conﬁguring HTTPS for
+your Elastic Beanstalk environment.
+When you conﬁgure an SSL certiﬁcate for your environment, data is encrypted between the client
+and the Elastic Load Balancing load balancer for your environment. By default, encryption is
+terminated at the load balancer, and traﬃc between the load balancer and Amazon EC2 instances
+is unencrypted.
+
+Persistent storage
+Elastic Beanstalk applications run on Amazon EC2 instances that have no persistent local storage.
+When the Amazon EC2 instances terminate, the local ﬁle system isn't saved. New Amazon EC2
+instances start with a default ﬁle system. We recommend that you conﬁgure your application to
+store data in a persistent data source. AWS oﬀers a number of persistent storage services that you
+can use for your application. The following table lists them.
+Storage service
+
+Service documentation
+
+Elastic Beanstalk integration
+
+Amazon S3
+
+Amazon Simple Storage
+Service Documentation
+
+Using Elastic Beanstalk with
+Amazon S3
+
+Amazon Elastic File
+System
+
+Amazon Elastic File System
+Documentation
+
+Using Elastic Beanstalk with
+Amazon Elastic File System
+
+Amazon Elastic Block
+Store
+
+Amazon Elastic Block Store
+
+Amazon DynamoDB
+
+Amazon DynamoDB
+Documentation
+
+Persistent storage
+
+Feature Guide: Elastic Block
+Store
+Using Elastic Beanstalk with
+Amazon DynamoDB
+149
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+Storage service
+
+Service documentation
+
+Elastic Beanstalk integration
+
+Amazon Relational
+Database Service (RDS)
+
+Amazon Relational Database
+Service Documentation
+
+Using Elastic Beanstalk with
+Amazon RDS
 
 Note
-Links in the console navigation pane will display the corresponding tab.
+Elastic Beanstalk creates a webapp user for you to set up as the owner of application
+directories on EC2 instances. For Amazon Linux 2 platform versions that are released on
+or after Feburary 3, 2022, Elastic Beanstalk assigns the webapp user a uid (user id) and gid
+(group id) value of 900 for new environments. It does the same for existing environments
+following a platform version update. This approach keeps consistent access permission for
+the webapp user to permanent ﬁle system storage.
+In the unlikely situation that another user or process is already using 900, the operating
+system defaults the webapp user uid and gid to another value. Run the Linux command
+id webapp on your EC2 instances to verify the uid and gid values that are assigned to the
+webapp user.
 
-Troubleshooting with logs
-For troubleshooting unexpected behaviors or debugging deployments, you might want to check
-the logs in your environments.
-You can request 100 lines of all the log ﬁles under the Logs tab in the Elastic Beanstalk console.
-Alternatively, you can connect directly to the Amazon EC2 instance and tail the logs in realtime.
-To request the logs (Elastic Beanstalk console)
-1.
+Fault tolerance
+As a rule of thumb, you should be a pessimist when designing architecture for the cloud. Leverage
+the elasticity that it oﬀers. Always design, implement, and deploy for automated recovery from
+failure. Use multiple Availability Zones for your Amazon EC2 instances and for Amazon RDS.
+Availability Zones are conceptually like logical data centers. Use Amazon CloudWatch to get more
+visibility into the health of your Elastic Beanstalk application and take appropriate actions in case
+of hardware failure or performance degradation. Conﬁgure your Auto Scaling settings to maintain
+your ﬂeet of Amazon EC2 instances at a ﬁxed size so that unhealthy Amazon EC2 instances are
+replaced by new ones. If you're using Amazon RDS, then set the retention period for backups, so
+that Amazon RDS can perform automated backups.
 
-Navigate to your environment in the Elastic Beanstalk console.
+Content delivery
+When users connect to your website, their requests may be routed through a number of individual
+networks. As a result, users might experience poor performance due to high latency. Amazon
+CloudFront can help ameliorate latency issues by distributing your web content, such as images
+and video, across a network of edge locations around the world. Users' requests are routed to the
+Fault tolerance
 
-2.
-
-Choose the Logs tab or left-nav, then choose Request logs.
-
-3.
-
-Select Last 100 lines.
-
-4.
-
-After the logs are created, choose the Download link to view the logs in the browser.
-
-In the logs, ﬁnd the log and note the directory for the nginx access log.
-
-Troubleshooting with logs
-
-16
-
-AWS Elastic Beanstalk
-
-Developer Guide
-
-Add a policy to enable connections to Amazon EC2
-Before you can connect, you must add a policy that enables connections to Amazon EC2 with
-Session Manager.
-1.
-
-Navigate to the IAM console.
-
-2.
-
-Find and select the aws-elasticbeanstalk-ec2-role role.
-
-3.
-
-Choose Add permission, then Attach policies.
-
-4.
-
-Search for a default policy that begins with the following text:
-AmazonSSMManagedEC2Instance, then add it to the role.
-
-To connect to your Amazon EC2 with Session Manager
-1.
-
-Navigate to the Amazon EC2 console.
-
-2.
-
-Choose Instances, then select your gs-app-web-env instance.
-
-3.
-
-Choose Connect, then Session Manager.
-
-4.
-
-Choose Connect.
-
-After connecting to the instance, start a bash shell and tail the logs:
-1.
-
-Run the command bash.
-
-2.
-
-Run the command cd /var/log/nginx.
-
-3.
-
-Run the command tail -f access.log.
-
-4.
-
-In your browser, go to the application domain URL. Refresh.
-
-Congratulations, you're connected!
-You should see log entries in your instance update every time you refresh the page.
-
-Connect button not working?
-If the connect button is not available, go back to IAM and verify that you added the
-necessary policy to the role.
-
-Troubleshooting with logs
-
-17
+150
 
 AWS Elastic Beanstalk
 
 Developer Guide
 
-Step 4 - Update your application
-Eventually, you will want to update your application. You can deploy a new version at any time, as
-long as no other update operations are in progress on your environment.
-The application version that you started this tutorial with is called Sample Application.
+nearest edge location, so content is delivered with the best possible performance. CloudFront
+works seamlessly with Amazon S3, which durably stores the original, deﬁnitive versions of your
+ﬁles. For more information about Amazon CloudFront, see the Amazon CloudFront Developer
+Guide.
 
-To update your application version
-1.
+Software updates and patching
+AWS Elastic Beanstalk regularly releases platform updates to provide ﬁxes, software updates,
+and new features. Elastic Beanstalk oﬀers several options to handle platform updates. With
+managed platform updates your environment automatically upgrades to the latest version of a
+platform during a scheduled maintenance window while your application remains in service. For
+environments created on November 25, 2019 or later using the Elastic Beanstalk console, managed
+updates are enabled by default whenever possible. You can also manually initiate updates using
+the Elastic Beanstalk console or EB CLI.
 
-Download the following PHP sample application:
-PHP – php-v2.zip
+Connectivity
+Elastic Beanstalk needs to be able to connect to the instances in your environment to complete
+deployments. When you deploy an Elastic Beanstalk application inside an Amazon VPC, the
+conﬁguration required to enable connectivity depends on the type of Amazon VPC environment
+you create:
+• For single-instance environments, no additional conﬁguration is required. This is because, with
+these environments, Elastic Beanstalk assigns each Amazon EC2 instance a public Elastic IP
+address that enables the instance to communicate directly with the internet.
+• For load-balanced, scalable environments in an Amazon VPC with both public and private
+subnets, you must do the following:
+• Create a load balancer in the public subnet to route inbound traﬃc from the internet to the
+Amazon EC2 instances.
+• Create a network address translation (NAT) device to route outbound traﬃc from the Amazon
+EC2 instances in private subnets to the internet.
+• Create inbound and outbound routing rules for the Amazon EC2 instances inside the private
+subnet.
+• If you're using a NAT instance, conﬁgure the security groups for the NAT instance and Amazon
+EC2 instances to enable internet communication.
+• For a load-balanced, scalable environment in an Amazon VPC that has one public subnet, no
+additional conﬁguration is required. This is because, with this environment, your Amazon EC2
+Software updates and patching
 
-2.
-
-Open the Elastic Beanstalk console, and in the Regions list, select your AWS Region.
-
-3.
-
-In the navigation pane, choose Environments, and then choose the name of your environment
-from the list.
-
-4.
-
-On the environment overview page, choose Upload and deploy.
-
-5.
-
-Select Choose ﬁle, and then upload the sample application source bundle that you
-downloaded.
-The console automatically ﬁlls in the Version label with a new unique label, automatically
-incrementing a trailing integer. If you choose your own version label, ensure that it's unique.
-
-Step 4 - Update your application
-
-18
-
-AWS Elastic Beanstalk
-
-6.
-
-Developer Guide
-
-Choose Deploy.
-
-While Elastic Beanstalk deploys your ﬁle to your Amazon EC2 instances, you can view the
-deployment status on the Environment overview page. While the application version is updated,
-the environment Health status is gray. When the deployment is complete, Elastic Beanstalk
-performs an application health check. When the application responds to the health check, it's
-considered healthy and the status returns to green. The environment overview shows the new
-Running Version—the name you provided as the Version label.
-Elastic Beanstalk also uploads your new application version and adds it to the table of application
-versions. To view the table, choose Application versions under getting-started-app on the
-navigation pane.
-
-Update success!
-You should see an updated "v2" message after refreshing your browser.
-If you want to edit the source yourself, unzip, edit, then re-zip the source bundle. On
-macOS, use the following command from inside your php directory with the -X to exclude
-extra ﬁle attributes:
-zip -X -r ../php-v2.zip .
-
-Step 5 - Scale your application
-You can conﬁgure your environment to better suit your application. For example, if you have
-a compute-intensive application, you can change the type of Amazon Elastic Compute Cloud
-(Amazon EC2) instance that is running your application. To apply conﬁguration changes, Elastic
-Beanstalk performs an environment update.
-Some conﬁguration changes are simple and happen quickly. Some changes require deleting
-and recreating AWS resources, which can take several minutes. When you change conﬁguration
-settings, Elastic Beanstalk warns you about potential application downtime.
-
-Step 5 - Scale your application
-
-19
+151
 
 AWS Elastic Beanstalk
 
 Developer Guide
 
-Increase capacity settings
-In this example of a conﬁguration change, you edit your environment's capacity settings. You
-conﬁgure a load-balanced, scalable environment that has between two and four Amazon EC2
-instances in its Auto Scaling group, and then you verify that the change occurred. Elastic Beanstalk
-creates an additional Amazon EC2 instance, adding to the single instance that it created initially.
-Then, Elastic Beanstalk associates both instances with the environment's load balancer. As a result,
-your application's responsiveness is improved and its availability is increased.
-To change your environment's capacity
-1.
+instances are conﬁgured with a public IP address that enables the instances to communicate with
+the internet.
+For more information about using Elastic Beanstalk with Amazon VPC, see Using Elastic Beanstalk
+with Amazon VPC.
 
-Open the Elastic Beanstalk console, and in the Regions list, select your AWS Region.
+Connectivity
 
-2.
-
-In the navigation pane, choose Environments, and then choose the name of your environment
-from the list.
-
-3.
-
-In the navigation pane, choose Conﬁguration.
-
-4.
-
-In the Instance traﬃc and scaling conﬁguration category, choose Edit.
-
-5.
-
-Collapse the Instances section, so you can more easily see the Capacity section. Under Auto
-Scaling group change Environment type to Load balanced.
-
-6.
-
-In the Instances row, change Min to 2 and Max to 4.
-
-Increase capacity settings
-
-20
+152
 
 AWS Elastic Beanstalk
 
-7.
+Developer Guide
+
+Elastic Beanstalk platforms
+AWS Elastic Beanstalk provides a variety of platforms on which you can build your applications.
+You design your web application to one of these platforms, and Elastic Beanstalk deploys your
+code to the platform version you selected to create an active application environment.
+Elastic Beanstalk provides platforms for diﬀerent programming languages, application servers, and
+Docker containers. Some platforms have multiple concurrently-supported versions.
+Topics
+• Elastic Beanstalk platforms glossary
+• Shared responsibility model for Elastic Beanstalk platform maintenance
+• Elastic Beanstalk platform support policy
+• Elastic Beanstalk platform release schedule
+• Elastic Beanstalk supported platforms
+• Elastic Beanstalk Linux platforms
+• Extending Elastic Beanstalk Linux platforms
+
+Elastic Beanstalk platforms glossary
+Following are key terms related to AWS Elastic Beanstalk platforms and their lifecycle.
+Runtime
+The programming language-speciﬁc runtime software (framework, libraries, interpreter, vm,
+etc.) required to run your application code.
+Elastic Beanstalk Components
+Software components that Elastic Beanstalk adds to a platform to enable Elastic Beanstalk
+functionality. For example, the enhanced health agent is necessary for gathering and reporting
+health information.
+Platform
+A combination of an operating system (OS), runtime, web server, application server, and
+Elastic Beanstalk components. Platforms provide components that are available to run your
+application.
+Platforms glossary
+
+742
+
+AWS Elastic Beanstalk
 
 Developer Guide
 
-To save the changes choose Apply at the bottom of the page.
-If you are warned that the update will replace all of your current instances. Choose Conﬁrm.
+Platform Version
+A combination of speciﬁc versions of an operating system (OS), runtime, web server, application
+server, and Elastic Beanstalk components. You create an Elastic Beanstalk environment based
+on a platform version and deploy your application to it.
+A platform version has a semantic version number of the form X.Y.Z, where X is the major
+version, Y is the minor version, and Z is the patch version.
+A platform version can be in one of the following states:
+• Recommended – The latest platform version in a supported platform branch. This version
+contains the most up-to-date components and is recommended for use in production
+environments.
+• Not Recommended – Any platform version that is not the latest version in its platform
+branch. While these versions may remain functional, we strongly recommend updating to
+the latest platform version. You can use managed platform updates to help stay up-to-date
+automatically.
+You can verify if a platform version is recommended using the AWS CLI command describeplatform-version and checking the PlatformLifecycleState ﬁeld.
+Platform Branch
+A line of platform versions sharing speciﬁc (typically major) versions of some of their
+components, such as the operating system (OS), runtime, or Elastic Beanstalk components. For
+example: Python 3.13 running on 64bit Amazon Linux 2023; IIS 10.0 running on 64bit Windows
+Server 2025. Platform branches receive updates in the form of new platform versions. Each
+successive platform version in a branch is an update to the previous one.
+The recommended version in each supported platform branch is available to you
+unconditionally for environment creation. A previous platform version is available to you if you
+were using an environment with it at the time the platform version was superceded by a new
+platform version. Previous platform versions lack the most up-to-date components and aren't
+recommended for use.
+A platform branch can be in one of the following states:
+• Supported – A current platform branch. It consists entirely of supported components.
+Supported components have not reached End of Life (EOL), as designated by their
+suppliers. It receives ongoing platform updates, and is recommended for use in production
+Platforms glossary
 
-The environment update can take a few minutes. You should see several updates in the list of
-events. Watch for the event Successfully deployed new conﬁguration to environment.
+743
 
-Verify increased capacity
-After the environment update is complete and the environment is ready, Elastic Beanstalk
-automatically launched a second instance to meet your new minimum capacity setting.
-To verify the increased capacity
-1.
+AWS Elastic Beanstalk
 
-Choose Health from either the tab list or left navigation pane.
+Developer Guide
 
-2.
+environments. For a list of supported platform branches, see Elastic Beanstalk supported
+platforms in the AWS Elastic Beanstalk Platforms guide.
+• Beta – A preview, pre-release platform branch. It's experimental in nature. It may receive
+ongoing platform updates for a while, but has no long-term support. A beta platform branch
+isn't recommended for use in production environments. Use it only for evaluation. For a list
+of beta platform branches, see Elastic Beanstalk Platform Versions in Public Beta in the AWS
+Elastic Beanstalk Platforms guide.
+• Deprecated – A platform branch where one or more components (such as the runtime or
+operating system) are approaching End of Life (EOL) or have reached EOL, as designated
+by their suppliers. While a deprecated platform branch continues to receive new platform
+versions until its retirement date, components that have reached EOL don't receive updates.
+For example, if a runtime version reaches EOL, the platform branch will be marked as
+deprecated but will continue to receive operating system updates until the platform branch
+retirement date. The platform branch will not continue to receive updates to the EOL runtime
+version. A deprecated platform branch isn't recommended for use.
+• Retired – A platform branch that no longer receives any updates. Retired platform branches
+aren't available to create new Elastic Beanstalk environments using the Elastic Beanstalk
+console. If your environment uses a retired platform branch, you must update to a supported
+platform branch to continue receiving updates. A retired platform branch isn't recommended
+for use. For more details about retired platform branches, see the section called “Platform
+support policy”. For a list of platform branches scheduled for retirement, see Retiring
+platform branch schedule. To see past retired platform branches, see Retired platform branch
+history.
+If your environment uses a deprecated or retired platform branch, we recommend that you
+update it to a platform version in a supported platform branch. For details, see the section
+called “Platform updates”.
+You can verify the state of a platform branch using the AWS CLI command describe-platformversion and checking the PlatformBranchLifecycleState ﬁeld.
+Platform Update
+A release of new platform versions that contain updates to some components of the platform
+—OS, runtime, web server, application server, and Elastic Beanstalk components. Platform
+updates follow semantic version taxonomy, and can have three levels:
 
-Review the Enhanced instance health section.
+Platforms glossary
 
-You just scaled up!
-With two Amazon EC2 instances, your environment capacity has doubled, and it only took a
-few minutes.
+744
 
-Cleaning up your Elastic Beanstalk environment
-To ensure that you're not charged for any services you aren't using, delete all application versions
-and terminate environments, which also deletes the AWS resources that the environment created
-for you.
+AWS Elastic Beanstalk
 
-Verify increased capacity
+Developer Guide
 
-21
+• Major update – An update that has changes that are incompatible with existing platform
+versions. You may need to modify your application to run correctly on a new major version. A
+major update has a new major platform version number.
+• Minor update – An update that has changes that are backward compatible with existing
+platform versions in most cases. Depending on your application, you may need to modify
+your application to run correctly on a new minor version. A minor update has a new minor
+platform version number.
+• Patch update – An update that consists of maintenance releases (bug ﬁxes, security updates,
+and performance improvements) that are backward compatible with an existing platform
+version. A patch update has a new patch platform version number.
+Managed Updates
+An Elastic Beanstalk feature that automatically applies patch and minor updates to the
+operating system (OS), runtime, web server, application server, and Elastic Beanstalk
+components for an Elastic Beanstalk supported platform version. A managed update applies a
+newer platform version in the same platform branch to your environment. You can conﬁgure
+managed updates to apply only patch updates, or minor and patch updates. You can also
+disable managed updates completely.
+For more information, see Managed platform updates.
+
+Shared responsibility model for Elastic Beanstalk platform
+maintenance
+AWS and our customers share responsibility for achieving a high level of software component
+security and compliance. This shared model reduces your operational burden.
+For details, see the AWS Shared Responsibility Model.
+AWS Elastic Beanstalk helps you perform your side of the shared responsibility model by providing
+a managed updates feature. This feature automatically applies patch and minor updates for an
+Elastic Beanstalk supported platform version. If a managed update fails, Elastic Beanstalk notiﬁes
+you of the failure to ensure that you are aware of it and can take immediate action.
+For more information, see Managed platform updates.
+In addition, Elastic Beanstalk does the following:
+Shared responsibility model
+
+745
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+• Publishes its platform support policy and retirement schedule for the coming 12 months.
+• Releases patch, minor, and major updates of operating system (OS), runtime, application server,
+and web server components typically within 30 days of their availability. Elastic Beanstalk
+is responsible for creating updates to Elastic Beanstalk components that are present on its
+supported platform versions. All other updates come directly from their suppliers (owners or
+community).
+We announce all updates to our supported platforms in our release notes in the AWS Elastic
+Beanstalk Release Notes guide. We also provide a list of all supported platforms and their
+components, along with a platform history, in the AWS Elastic Beanstalk Platforms guide. For more
+information see Supported platforms and component history.
+You are responsible to do the following:
+• Update all the components that you control (identiﬁed as Customer in the AWS Shared
+Responsibility Model). This includes ensuring the security of your application, your data, and any
+components that your application requires and that you downloaded.
+• Ensure that your Elastic Beanstalk environments are running on a supported platform version,
+and migrate any environment running on a retired platform version to a supported version.
+• If you’re using a custom Amazon machine image (AMI) for your Elastic Beanstalk environment,
+patch, maintain, and test your custom AMI so that it remains current and compatible with
+a supported Elastic Beanstalk platform version. For more information about managing
+environments with a custom AMI, see Using a custom Amazon machine image (AMI) in your
+Elastic Beanstalk environment.
+• Resolve all issues that come up in failed managed update attempts and retry the update.
+• Patch the OS, runtime, application server, and web server yourself if you opted out of Elastic
+Beanstalk managed updates. You can do this by applying platform updates manually or directly
+patching the components on all relevant environment resources.
+• Manage the security and compliance of any AWS services that you use outside of Elastic
+Beanstalk according to the AWS Shared Responsibility Model.
+
+Shared responsibility model
+
+746
+
+AWS Elastic Beanstalk
+
+Developer Guide
+
+Elastic Beanstalk platform support policy
+Elastic Beanstalk supports platform branches that still receive ongoing minor and patch updates
+from their suppliers (owners or community). For a complete deﬁnition of related terms, see Elastic
+Beanstalk platforms glossary.
+
+Retired platform branches
+When a component of a supported platform branch is marked End of Life (EOL) by its supplier,
+Elastic Beanstalk marks the platform branch as retired. Components of a platform branch include
+the following: operating system (OS), runtime language version, application server, or web server.
+Once a platform branch is marked as retired the following policies apply:
+• Elastic Beanstalk stops providing maintenance updates, including security updates.
+• Elastic Beanstalk no longer provides technical support for retired platform branches.
+• Elastic Beanstalk no longer makes the platform branch available to new Elastic Beanstalk
+customers for deployments to new environments. There is a 90 day grace period from the
+published retirement date for existing customers with active environments that are running on
+retired platform branches.
+
+Note
+A retired platform branch will not be available in the Elastic Beanstalk console. However, it
+will be available through the AWS CLI, EB CLI and EB API for customers that have existing
+environments based on the retired platform branch. Existing customers can also use the
+Clone environment and Rebuild environment consoles.
+
+For a list of platform branches that are scheduled for retirement see the Retiring platform branch
+schedule in the Elastic Beanstalk platform schedule topic that follows.
+For more information about what to expect when your environment’s platform branch retires, see
+Platform retirement FAQ.
+
+Platform support policy
+
+747
 
 

@@ -175,688 +175,101 @@ VPCs
 
 Developer Guide
 
-You have control over the VPC networking components, such as IP address assignment, subnets,
-and route table creation.
-VPCs that contain a subnet in a Wavelength Zone can connect to a carrier gateway. A carrier
-gateway allows you to connect to the following resources:
-• 4G/LTE and 5G devices on the telecommunication carrier network
-• Internet access including ﬁxed wireless access for select Wavelength Zone partners. For more
-information, see Multi-access AWS Wavelength.
-• Outbound traﬃc to public internet resources
-
-Subnets
-Any subnet that you create in a Wavelength Zone inherits the main VPC route table, which includes
-the local route. The local route enables connectivity between the subnets in the VPC, including the
-subnets that are in the Wavelength Zone.
-AWS recommends that you conﬁgure custom route tables for your subnets in Wavelength Zones.
-The destinations are the same destinations as a subnet in an Availability Zone or Local Zone, with
-the addition of a carrier gateway. For more information, see the section called “Routing”.
-
-Carrier gateways
-A carrier gateway serves two purposes. It allows inbound traﬃc from a carrier network in a speciﬁc
-location, and it allows outbound traﬃc to the carrier network and internet. There is no inbound
-connection conﬁguration from the internet to a Wavelength Zone through the carrier gateway.
-A carrier gateway supports IPv4 traﬃc.
-Carrier gateways are only available for VPCs that contain subnets in a Wavelength Zone. The carrier
-gateway provides connectivity between your Wavelength Zone and the telecommunication carrier,
-and devices on the telecommunication carrier network. The carrier gateway performs NAT of the
-Wavelength instances' IP addresses to the Carrier IP addresses from a pool that is assigned to the
-network border group. The carrier gateway NAT function is similar to how an internet gateway
-functions in a Region.
-
-Subnets
-
-6
-
-AWS Wavelength
-
-Developer Guide
-
-Carrier IP address
-A Carrier IP address is the address that you assign to a network interface, which resides in a
-subnet in a Wavelength Zone (for example an EC2 instance). The carrier gateway uses the address
-for traﬃc from the interface to the internet or to mobile devices. The carrier gateway uses
-NAT to translate the address, and then sends the traﬃc to the destination. Traﬃc from the
-telecommunication carrier network routes through the carrier gateway.
-You allocate a Carrier IP address from a network border group, which is a unique set of Availability
-Zones, Local Zones, or Wavelength Zones from which AWS advertises IP addresses, for example,
-us-east-1-wl1-bos-wlz-1.
-
-Routing
-You can set the carrier gateway as a destination in a route table for the following resources:
-• VPCs that contain subnets in a Wavelength Zone
-• Subnets in Wavelength Zones
-Create a custom route table for the subnets in the Wavelength Zones so that the default route
-goes to the carrier gateway, which then sends traﬃc to the internet and telecommunication carrier
-network.
-
-Example: Carrier gateway routing to the public internet
-Consider a scenario with the following conﬁguration:
-• A VPC with Availability Zones and a Wavelength Zone
-• A subnet in the Wavelength Zone
-• An EC2 instance in the subnet in the Wavelength Zone
-• A Carrier IP address for the network interface associated with the EC2 instance
-• An IP address association that maps the private IP address of the EC2 instance to the Carrier IP
-address
-
-Carrier IP address
-
-7
-
-AWS Wavelength
-
-Developer Guide
-
-You need the following entries in the Wavelength subnet route table.
-
-Destination
-
-Target
-
-Notes
-
-VPC CIDR
-
-Local
-
-This route allows for intraVPC connectivity, including
-subnets in the Availability
-Zones.
-
-0.0.0.0/0
-
-carrier-gateway-id
-
-The Carrier IP address
-provides internet connectivity
-through the carrier gateway.
-
-Carrier gateway access to the public internet
-The carrier gateway provides access to the internet from your Wavelength subnets. For information
-about protocol considerations, see the section called “Networking considerations”.
-Traﬃc initiated from the EC2 instance for the internet uses the 0.0.0.0/0 route to route traﬃc to
-the carrier gateway. The carrier gateway maps the EC2 instance IP address to the Carrier IP address,
-and then sends the traﬃc to the telecommunication carrier.
-
-Example: Carrier gateway routing to the public internet
-
-8
-
-AWS Wavelength
-
-Developer Guide
-
-DNS
-EC2 instances use EC2 DNS to resolve domain names to IP addresses. Route 53 supports DNS
-features, such as domain registration, and DNS routing. Both public and private hosted Wavelength
-Zones are supported for routing traﬃc to speciﬁc domains. Route 53 resolvers are hosted in the
-Region.
-You can also use your own DNS services to resolve domain names.
-
-Maximum transmission unit
-Generally, the maximum transmission unit (MTU) is as follows:
-• 9001 bytes between EC2 instances in the same Wavelength Zone.
-• 1500 bytes between carrier gateway and a Wavelength Zone.
-• 1500 bytes between an EC2 instance in a Wavelength Zone and an EC2 instance in the Region
-when the traﬃc uses a public IP address.
-• 1300 bytes between an EC2 instance in a Wavelength Zone and an EC2 instance in the Region
-when the traﬃc uses a private IP address.
-
-DNS
-
-9
-
-AWS Wavelength
-
-Developer Guide
-
-Get started with AWS Wavelength
-The following diagram shows the resources that you need to conﬁgure to get started using AWS
-Wavelength.
-• A VPC in your Region
-• A carrier gateway
-• A public subnet in an Availability Zone in your Region
-• An instance in the public subnet
-• An instance in the Wavelength Zone subnet with a Carrier IP address
-
-Tasks
-• Step 1: Opt in to Wavelength Zones
-• Step 2: Conﬁgure your network
-• Step 3: Launch an instance in your Availability Zone public subnet
-10
-
-AWS Wavelength
-
-Developer Guide
-
-• Step 4: Launch an instance in the Wavelength zone
-• Step 5: Test the connectivity
-
-Step 1: Opt in to Wavelength Zones
-Before you specify a Wavelength Zone for a resource or service, you must opt in to the zone.
-Prerequisites
-• Some AWS resources are not available in all Regions. Make sure that you can create the resources
-that you need in the desired Region or Wavelength Zone before launching an instance in a
-speciﬁc Wavelength Zone.
-• Before you begin, review Quotas and considerations, which includes information about available
-Wavelength Zones, service diﬀerences, and Service Quotas. You should also speak with your
-mobile operator about mobile service plans and any additional requirements.
-To opt in to Wavelength Zone using the console
-1.
-
-Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-
-2.
-
-From the Region selector in the navigation bar, select the Region for the Wavelength Zone.
-
-3.
-
-On the navigation pane, choose EC2 Dashboard.
-
-4.
-
-In the upper-right corner of the page, choose Account attributes, Zones.
-
-5.
-
-Under Wavelength Zones, choose Manage.
-
-6.
-
-Choose Enabled.
-
-7.
-
-Choose Update zone group.
-
-To enable Wavelength Zones using the AWS CLI
-Alternatively, use the AWS CLI to enable Wavelength Zones. To do so, use the modify-availabilityzone-group command.
-
-Step 2: Conﬁgure your network
-After you opt in to the Wavelength Zone, create a VPC, a carrier gateway, and a public subnet in the
-Availability Zone.
-Step 1: Opt in to Wavelength Zones
-
-11
-
-AWS Wavelength
-
-Developer Guide
-
-Tasks
-• Create a VPC
-• Create a carrier gateway and a subnet associated with the Wavelength Zone
-• Create a public subnet in an Availability Zone
-
-Create a VPC
-Create a VPC to extend to your Wavelength Zone.
-To create a VPC using the console
-1.
-
-Open the Amazon VPC console at https://console.aws.amazon.com/vpc/.
-
-2.
-
-Choose Create VPC.
-
-3.
-
-For Resources to create, choose VPC only.
-
-4.
-
-For Name tag, optionally provide a name for your VPC. Doing so creates the tag Name=value.
-
-5.
-
-For IPv4 CIDR block, specify an IPv4 CIDR block for the VPC. We recommend that you specify a
-CIDR block from the private (non-publicly routable) IP address ranges as speciﬁed in RFC 1918;
-for example, 10.0.0.0/16, or 192.168.0.0/16.
-Note
-You can specify a range of publicly routable IPv4 addresses. However, we currently
-do not support direct access to the internet from publicly routable CIDR blocks in a
-VPC. Windows instances cannot boot correctly if launched into a VPC with ranges from
-224.0.0.0 to 255.255.255.255 (Class D and Class E IP address ranges).
-
-6.
-
-Choose Create VPC.
-
-Create a carrier gateway and a subnet associated with the Wavelength
+Architect apps for Wavelength
+Wavelength Zones are designed for the following workloads:
+• Applications that require edge resiliency across existing AWS hybrid and edge infrastructure
+deployments
+• Applications that need to connect to compute with low latency
+• Applications that need to run in a certain geography due to legal or regulatory requirements
+• Applications that need consistent data rates from mobile devices to compute in a Wavelength
 Zone
-After you create a VPC, create a carrier gateway, and then select the subnets that route traﬃc to
-the carrier gateway.
-When you choose to automatically route traﬃc from subnets to the carrier gateway, we create the
-following resources:
-Create a VPC
+Review Quotas and considerations, which includes information about available Wavelength Zones,
+service diﬀerences, and Service Quotas.
+Consider the following factors when using Wavelength Zones:
+• AWS recommends that you architect the edge applications in a hub and spoke model with the
+Region to provide the most scalable, resilient, and cost-eﬀective options for components. For
+more information, see the section called “Workload placement”
+• Services that run in Wavelength Zones have diﬀerent compliance than services in an AWS Region.
+For more information, see the section called “Compliance validation”.
+Most Wavelength Zones have network access that is speciﬁc to a telecommunication carrier and
+location. Therefore, you might need to have multiple Wavelength Zones for your latency-sensitive
+applications to meet your latency requirements. For more information, see the section called
+“Networking considerations”.
 
-12
+Discover the closest Wavelength Zone endpoint
+You can use the following procedures to have client devices discover the closest Wavelength Zone
+endpoint, for example an Amazon EC2 instance:
+• Register the instance with a discovery service such as AWS Cloud Map. For information about
+how to register an instance, see Registering Instances in the AWS Cloud Map Developer Guide.
+• Another approach is to use multiple Wavelength Zones across your deployment and utilize
+adjacent Zones, powered by carrier-developed edge discovery services to route mobile traﬃc.
+Discover the closest Wavelength Zone endpoint
 
-AWS Wavelength
-
-Developer Guide
-
-• A carrier gateway
-• A subnet. You can optionally assign all carrier gateway tags except the Name tag to the subnet.
-• A network ACL with the following resources:
-• A subnet association with the subnet in the Wavelength Zone
-• Default inbound and outbound rules for your traﬃc.
-• A route table with the following resources:
-• A route for local traﬃc
-• A route that routes non-local traﬃc to the carrier gateway
-• An association with the subnet
-To create a carrier gateway
-1.
-
-Open the Amazon VPC console at https://console.aws.amazon.com/vpc/.
-
-2.
-
-In the navigation pane, choose Carrier gateways, and then choose Create carrier gateway.
-
-3.
-
-(Optional) For Name, enter a name for the carrier gateway.
-
-4.
-
-For VPC, choose the VPC.
-
-5.
-
-Choose Route subnet traﬃc to carrier gateway, and under Subnets to route do the following:
-a.
-
-Under Existing subnets in Wavelength Zone, select the box for each Wavelength subnet
-to route to the carrier gateway.
-
-b.
-
-To create a subnet in the Wavelength Zone, choose Add new subnet, enter the required
-information, and then choose Add new subnet.
-
-6.
-
-(Optional) To add a tag to the carrier gateway, choose Add tag, and then enter the tag key and
-tag value.
-
-7.
-
-Choose Create carrier gateway.
-
-Create a public subnet in an Availability Zone
-Create a subnet in an Availability Zone in the Region.
-To add a subnet
-1.
-
-Open the Amazon VPC console at https://console.aws.amazon.com/vpc/.
-
-2.
-
-In the navigation pane, choose Subnets.
-
-Create a public subnet in an Availability Zone
-
-13
+27
 
 AWS Wavelength
 
 Developer Guide
 
-3.
-
-Choose Create subnet.
-
-4.
-
-For VPC, choose the VPC.
-
-5.
-
-For Subnet name, provide a name for the subnet. Doing so creates the tag Name=value.
-
-6.
-
-For Availability Zone, chose an Availability Zone, or choose No Preference to have AWS
-choose one for you.
-
-7.
-
-For IPv4 CIDR block, specify an IPv4 address range for your subnet, using CIDR notation.
-
-8.
-
-Choose Create subnet.
-
-Step 3: Launch an instance in your Availability Zone public
-subnet
-Launch an EC2 instance in the subnet that you created in the Availability Zone. You will use this
-instance to test the connectivity from the Region to the Wavelength Zone.
-You can launch EC2 instances in the public subnet that you created. For information about how to
-launch an instance using the Amazon EC2 console, see Launch an EC2 instance using the console in
-the Amazon EC2 User Guide.
-
-Step 4: Launch an instance in the Wavelength zone
-After you complete the networking conﬁguration, launch an instance, and then allocate a Carrier IP
-address for the instance.
-Options
-• Option 1: Auto assign a Carrier IP address
-• Option 2: Allocate and associate a Carrier IP address from the network border group
-
-Option 1: Auto assign a Carrier IP address
-AWS recommends that you use the AWS CLI because you can automatically allocate and associate
-the Carrier IP address with the network interface.
-Use the run-instances command as follows to launch an instance in the Wavelength Zone subnet.
-Step 3: Launch an instance in your Availability Zone public subnet
-
-14
-
-AWS Wavelength
-
-Developer Guide
-
-aws ec2 run-instances --region us-east-1 --network-interfaces
-"DeviceIndex=0,AssociateCarrierIpAddress=true,SubnetId=subnet-036aa298f4EXAMPLE" -image-id ami-04125ecea1EXAMPLE --instance-type t3.medium
-
-• DeviceIndex – Specify 0 to indicate the primary network interface (eth0).
-• SubnetId – Specify the ID of the subnet in the Wavelength Zone.
-• AssociateCarrierIpAddress – Set this value to true to assign a Carrier IP address to the
-network interface.
-
-Option 2: Allocate and associate a Carrier IP address from the network
-border group
-You can launch EC2 instances in the subnet that you created when you added the carrier gateway.
-For more information, see the section called “Create a carrier gateway and a subnet associated with
-the Wavelength Zone”. Security groups control inbound and outbound traﬃc for instances in a
-subnet, just as they do for instances in an Availability Zone subnet. To connect to an EC2 instance
-in a subnet, specify a key pair when you launch the instance, just as you do for instances in an
-Availability Zone subnet. For information about how to launch an instance using the Amazon EC2
-console, see Launch an EC2 instance using the console in the Amazon EC2 User Guide.
-To allocate and associate a Carrier IP address
-1.
-
-Use the allocate-address command as follows to allocate a Carrier IP address.
-aws ec2 allocate-address --region us-east-1 --domain vpc --network-border-group useast-1-wl1-bos-wlz-1
-
-The following is example output.
-{
-"AllocationId": "eipalloc-05807b62acEXAMPLE",
-"PublicIpv4Pool": "amazon",
-"NetworkBorderGroup": "us-east-1-wl1-bos-wlz-1",
-"Domain": "vpc",
-"CarrierIp": "155.146.10.111"
-}
-Option 2: Allocate and associate a Carrier IP address from the network border group
-
-15
-
-AWS Wavelength
-
-2.
-
-Developer Guide
-
-Use the associate-address command as follows to associate the Carrier IP address with the EC2
-instance.
-aws ec2 associate-address --allocation-id eipalloc-05807b62acEXAMPLE --networkinterface-id eni-1a2b3c4d
-
-The following is example output.
-{
-"AssociationId": "eipassoc-02463d08ceEXAMPLE",
-}
-
-Step 5: Test the connectivity
-Before you test the connectivity, do the following:
-• Review the section called “Networking considerations”
-• Conﬁgure the instance security group to allow ICMP traﬃc.
-Test the connectivity from the instance in the Region to the Wavelength Zone instance. Depending
-on your operating system, use SSH or RDP to connect to the Carrier IP address of your Wavelength
-Zone instance. You can use a secure bastion host.
-Run the ping command to the Wavelength Zone instance. In the following example, the IP address
-of the subnet in the Wavelength Zone is 10.0.3.112.
-ping 10.0.3.112
-Pinging 10.0.3.112
-Reply from 10.0.3.112:
-Reply from 10.0.3.112:
-Reply from 10.0.3.112:
-
-bytes=32 time=<1ms TTL=128
-bytes=32 time=<1ms TTL=128
-bytes=32 time=<1ms TTL=128
-
-Ping statistics for 10.0.3.112
-Packets: Sent = 3, Received = 3,
-
-Lost = 0 (0% lost)
-
-Approximate round trip time in milliseconds
-Minimum = 0ms, Maximum = 0ms, Average = 0ms
-
-Step 5: Test the connectivity
-
-16
-
-AWS Wavelength
-
-Developer Guide
-
-Test the connectivity from the instance in the Wavelength Zone instance to the carrier network.
-Depending on your operating system, use SSH or RDP to connect to the Carrier IP address of your
-Wavelength Zone instance. You can use a secure bastion host.
-You need a device on the carrier network in order to test the connectivity from the Wavelength
-Zone to the carrier network.
-Run the ping command to an address in the carrier network. In the following example, the carrier
-network IP address is 198.51.100.130.
-ping 198.51.100.130
-Pinging 198.51.100.130
-Reply from 198.51.100.130:
-Reply from 198.51.100.130:
-Reply from 198.51.100.130:
-
-bytes=32 time=<1ms TTL=128
-bytes=32 time=<1ms TTL=128
-bytes=32 time=<1ms TTL=128
-
-Ping statistics for 198.51.100.130
-Packets: Sent = 3, Received = 3,
-
-Lost = 0 (0% lost)
-
-Approximate round trip time in milliseconds
-Minimum = 0ms, Maximum = 0ms, Average = 0ms
-
-Step 5: Test the connectivity
-
-17
-
-AWS Wavelength
-
-Developer Guide
-
-Carrier gateway for AWS Wavelength
-A carrier gateway serves two purposes. It allows inbound traﬃc from a carrier network in a speciﬁc
-location, and it allows outbound traﬃc to the carrier network and the internet. There is generally
-no inbound connection conﬁguration from the internet to a Wavelength Zone through the carrier
-gateway with the exception of select partners. For more information, see Multi-access AWS
+For more information, see Deploying dynamic 5G Edge Discovery architectures with AWS
 Wavelength.
-A carrier gateway supports IPv4 traﬃc.
-Carrier gateways are only available for VPCs that contain subnets in a Wavelength Zone. The carrier
-gateway provides connectivity between your Wavelength Zone and the carrier, and devices on
-the carrier network. The carrier gateway performs NAT of the Wavelength instances' IP addresses
-to the Carrier IP addresses from a pool that is assigned to the network border group. The carrier
-gateway NAT function is similar to how an internet gateway functions in a Region.
+• Applications that run on client devices can run latency tests such as ping from the client to
+select the best endpoint that is registered in AWS Cloud Map, or can use the geolocation data
+from the mobile device.
 
-Enable access to the carrier network
-To enable access to or from the carrier network for instances in a Wavelength subnet, you must do
-the following:
-• Create a VPC.
-• Create a carrier gateway and attach the carrier gateway to your VPC. When you create the carrier
-gateway, you can optionally choose which subnets route to the carrier gateway. When you select
-this option, we automatically create the resources related to carrier gateways, such as route
-tables and network ACLs. If you do not choose this option, then you must perform the following
-tasks:
-• Select the subnets that route traﬃc to the carrier gateway.
-• Ensure that your subnet route tables have a route that directs traﬃc to the carrier gateway.
-• Ensure that instances in your subnet have a globally unique Carrier IP address.
-• Ensure that your network access control lists and security group rules allow the relevant traﬃc
-to ﬂow to and from your instance.
+Load balancing
+Application Load Balancer (ALB) is supported in select Wavelength Zones. Load balancers distribute
+your incoming traﬃc across multiple targets, such as Amazon EC2 instances, containers, and IP
+addresses, within the Wavelength Zone. Key considerations include:
+• Network Load Balancer (NLB) is not supported in Wavelength Zones. To learn more, see Enabling
+load-balancing of non-HTTP(s) traﬃc on AWS Wavelength.
+• Cross-Zone load balancing across multiple Wavelength Zones is not supported.
+ALB is available in the following Wavelength Zones:
+• All Wavelength Zones in the us-east-1 Region.
+• All Wavelength Zones in us-west-2 Region.
+• All Wavelength Zones in the ap-northeast-1 Region.
+• All Wavelength Zones in the eu-central-1 Region.
 
-Enable access to the carrier network
+High availability
+Follow these strategies to deploy highly available architectures at the edge.
 
-18
+Deployment
+Consider the following:
+• Multiple Wavelength Zones within a given VPC: using techniques highlighted in the Discover
+the closest Wavelength Zone endpoint section, you can steer traﬃc to the optimal Wavelength
+Zone based on latency or application health.
+• Combine Wavelength Zones with other AWS hybrid and edge locations: you can combine
+AWS Local Zones subnets with AWS Wavelength Zones subnets to create highly-available
+Load balancing
 
-AWS Wavelength
-
-Developer Guide
-
-Work with carrier gateways
-The following sections describe how to manually create a carrier gateway for your VPC to support
-inbound traﬃc from the carrier network (for example, mobile phones), and to support outbound
-traﬃc to the carrier network and the internet.
-Tasks
-• Create a VPC
-• Create a carrier gateway
-• Create a security group to access the carrier network
-• Allocate and associate a Carrier IP address with the instance in the Wavelength Zone subnet
-• Routing to a Wavelength Zone carrier gateway
-• View the carrier gateway details
-• Manage carrier gateway tags
-• Delete a carrier gateway
-
-Create a VPC
-You can create an empty Wavelength VPC as follows.
-Limitation
-You can specify a range of publicly routable IPv4 addresses. However, we do not support direct
-access to the internet from publicly routable CIDR blocks in a VPC. Windows instances cannot boot
-correctly if launched into a VPC with ranges from 224.0.0.0 to 255.255.255.255 (Class D and
-Class E IP address ranges).
-1.
-
-Open the Amazon VPC console at https://console.aws.amazon.com/vpc/.
-
-2.
-
-In the navigation pane, choose Your VPCs, Create VPC.
-
-3.
-
-Do the following and then choose Create.
-• Name tag: Optionally provide a name for your VPC. Doing so creates a tag with a key of
-Name and the value that you specify.
-• IPv4 CIDR block: Specify an IPv4 CIDR block for the VPC. We recommend that you specify
-a CIDR block from the private (non-publicly routable) IP address ranges as speciﬁed in RFC
-1918; for example, 10.0.0.0/16, or 192.168.0.0/16.
-
-Work with carrier gateways
-
-19
+28
 
 AWS Wavelength
 
 Developer Guide
 
-To create a VPC using the AWS CLI
-Use the create-vpc command.
+deployments within a given geography. For example, you can create an Atlanta AWS Local Zone
+subnet (us-east-1-atl-2a) alongside an Atlanta Wavelength Zone subnet (us-east-1-wl1atl-wlz-1) within the same VPC.
 
-Create a carrier gateway
-After you create a VPC, create a carrier gateway and then select the subnets that route traﬃc to
-the carrier gateway.
-If you have not opted in to a Wavelength Zone, the Amazon Virtual Private Cloud Console prompts
-you to opt in. For more information, see the section called “Manage Zones”.
-When you choose to automatically route traﬃc from subnets to the carrier gateway, we create the
-following resources:
-• A carrier gateway
-• A subnet. You can optionally assign all carrier gateway tags that do not have a Key value of Name
-to the subnet.
-• A network ACL with the following resources:
-• A subnet associated with the subnet in the Wavelength Zone
-• Default inbound and outbound rules for all of your traﬃc.
-• A route table with the following resources:
-• A route for all local traﬃc
-• A route that routes all non-local traﬃc to the carrier gateway
-• An association with the subnet
-To create a carrier gateway
-1.
+DNS resolution
+One way to create both physical and logical redundancy across your high-availability edge
+deployments is to utilize the parent Region as the failover, using simple Route 53-based failover
+policies to steer traﬃc to an available endpoint. For more information, see Conﬁguring DNS
+failover in the Amazon Route 53 Developer Guide.
 
-Open the Amazon VPC console at https://console.aws.amazon.com/vpc/.
+Workload placement
+Run the following components in the Region:
+• Components that are less latency sensitive
+• Components that do not require data residency
+• Components that need to be shared across Zones
+• Components that need to persist state, such as databases
+Run the application components that need low latency and higher bandwidth over mobile
+networks in Wavelength Zones.
+For optimal throughput, AWS recommends that you use a public service endpoint when
+applications in the Wavelength Zone need to connect to AWS services in the parent Region.
 
-2.
+DNS resolution
 
-In the navigation pane, choose Carrier Gateways, and then choose Create carrier gateway.
-
-3.
-
-Optional: For Name, enter a name for the carrier gateway.
-
-4.
-
-For VPC, choose the VPC.
-
-5.
-
-Choose Route subnet traﬃc to carrier gateway, and under Subnets to route do the following.
-a.
-
-Under Existing subnets in Wavelength Zone, select the box for each subnet to route to
-the carrier gateway.
-
-Create a carrier gateway
-
-20
-
-AWS Wavelength
-
-b.
-
-Developer Guide
-
-To create a subnet in the Wavelength Zone, choose Add new subnet, specify the following
-information, and then choose Add new subnet:
-• Name tag: Optionally provide a name for your subnet. Doing so creates a tag with a key
-of Name and the value that you specify.
-• VPC: Choose the VPC.
-• Availability Zone: Choose the Wavelength Zone.
-• IPv4 CIDR block: Specify an IPv4 CIDR block for your subnet, for example,
-10.0.1.0/24.
-• To apply the carrier gateway tags to the subnet, select Apply same tags from this
-carrier gateway.
-
-6.
-
-7.
-
-(Optional) To add a tag to the carrier gateway, choose Add tag, and then do the following:
-•
-
-For Key, enter the key name.
-
-•
-
-For Value, enter the key value.
-
-Choose Create carrier gateway.
-
-To create a carrier gateway using the AWS CLI
-1.
-
-Use the create-carrier-gateway command.
-
-2.
-
-Add a VPC route table with the following resources:
-• A route for all VPC local traﬃc
-• A route that routes all non-local traﬃc to the carrier gateway
-• An association with the subnets in the Wavelength Zone
-For more information, see the section called “Routing to a Wavelength Zone carrier gateway”.
-
-Create a security group to access the carrier network
-By default, a VPC security group allows all outbound traﬃc. You can create a new security group
-and add rules that allow inbound traﬃc from the carrier. Then, you associate the security group
-with instances in the subnet.
-
-Create a security group to access the carrier network
-
-21
+29
 
 

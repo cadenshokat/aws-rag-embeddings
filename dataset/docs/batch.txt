@@ -223,367 +223,6 @@ Create IAM account and administrative user
 
 User Guide
 
-To sign up for an AWS account
-1.
-
-Open https://portal.aws.amazon.com/billing/signup.
-
-2.
-
-Follow the online instructions.
-Part of the sign-up procedure involves receiving a phone call or text message and entering a
-veriﬁcation code on the phone keypad.
-When you sign up for an AWS account, an AWS account root user is created. The root user
-has access to all AWS services and resources in the account. As a security best practice, assign
-administrative access to a user, and use only the root user to perform tasks that require root
-user access.
-
-AWS sends you a conﬁrmation email after the sign-up process is complete. At any time, you can
-view your current account activity and manage your account by going to https://aws.amazon.com/
-and choosing My Account.
-
-Create a user with administrative access
-After you sign up for an AWS account, secure your AWS account root user, enable AWS IAM Identity
-Center, and create an administrative user so that you don't use the root user for everyday tasks.
-Secure your AWS account root user
-1.
-
-Sign in to the AWS Management Console as the account owner by choosing Root user and
-entering your AWS account email address. On the next page, enter your password.
-For help signing in by using root user, see Signing in as the root user in the AWS Sign-In User
-Guide.
-
-2.
-
-Turn on multi-factor authentication (MFA) for your root user.
-For instructions, see Enable a virtual MFA device for your AWS account root user (console) in
-the IAM User Guide.
-
-Create a user with administrative access
-1.
-
-Enable IAM Identity Center.
-
-Create a user with administrative access
-
-8
-
-AWS Batch
-
-User Guide
-
-For instructions, see Enabling AWS IAM Identity Center in the AWS IAM Identity Center User
-Guide.
-2.
-
-In IAM Identity Center, grant administrative access to a user.
-For a tutorial about using the IAM Identity Center directory as your identity source, see
-Conﬁgure user access with the default IAM Identity Center directory in the AWS IAM Identity
-Center User Guide.
-
-Sign in as the user with administrative access
-•
-
-To sign in with your IAM Identity Center user, use the sign-in URL that was sent to your email
-address when you created the IAM Identity Center user.
-For help signing in using an IAM Identity Center user, see Signing in to the AWS access portal in
-the AWS Sign-In User Guide.
-
-Assign access to additional users
-1.
-
-In IAM Identity Center, create a permission set that follows the best practice of applying leastprivilege permissions.
-For instructions, see Create a permission set in the AWS IAM Identity Center User Guide.
-
-2.
-
-Assign users to a group, and then assign single sign-on access to the group.
-For instructions, see Add groups in the AWS IAM Identity Center User Guide.
-
-Create IAM roles for your compute environments and container
-instances
-Your AWS Batch compute environments and container instances require AWS account credentials
-to make calls to other AWS APIs on your behalf. Create an AWS Identity and Access Management
-role that provides these credentials to your compute environments and container instances, then
-associate that role with your compute environments.
-
-Create IAM roles
-
-9
-
-AWS Batch
-
-User Guide
-
-Note
-To verify that your AWS account has the required permissions, see Initial IAM service set up
-for your account.
-The AWS Batch compute environment and container instance roles are automatically
-created for you in the console ﬁrst-run experience. So, if you intend to use the AWS
-Batch console, you can move ahead to the next section. If you plan to use the AWS CLI
-instead, complete the procedures in Using service-linked roles for AWS Batch, Amazon ECS
-instance role, and Tutorial: Create the IAM execution role before creating your ﬁrst compute
-environment.
-
-Create a key pair for your instances
-AWS uses public-key cryptography to secure the login information for your instance. A Linux
-instance, such as an AWS Batch compute environment container instance, has no password to use
-for SSH access. You use a key pair to log in to your instance securely. You specify the name of the
-key pair when you create your compute environment, then provide the private key when you log in
-using SSH.
-If you didn't create a key pair already, you can create one using the Amazon EC2 console. Note that,
-if you plan to launch instances in multiple AWS Regions, create a key pair in each Region. For more
-information about Regions, see Regions and Availability Zones in the Amazon EC2 User Guide.
-To create a key pair
-1.
-
-Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
-
-2.
-
-From the navigation bar, select an AWS Region for the key pair. You can select any Region
-that's available to you, regardless of your location: however, key pairs are speciﬁc to a Region.
-For example, if you plan to launch an instance in the US West (Oregon) Region, create a key
-pair for the instance in the same Region.
-
-3.
-
-In the navigation pane, choose Key Pairs, Create Key Pair.
-
-4.
-
-In the Create Key Pair dialog box, for Key pair name, enter a name for the new key pair , and
-choose Create. Choose a name that you can remember, such as your user name, followed by key-pair, plus the Region name. For example, me-key-pair-uswest2.
-
-Create a key pair
-
-10
-
-AWS Batch
-
-5.
-
-User Guide
-
-The private key ﬁle is automatically downloaded by your browser. The base ﬁle name is the
-name that you speciﬁed as the name of your key pair, and the ﬁle name extension is .pem.
-Save the private key ﬁle in a safe place.
-Important
-This is the only chance for you to save the private key ﬁle. You need to provide the
-name of your key pair when you launch an instance and the corresponding private key
-each time that you connect to the instance.
-
-6.
-
-If you use an SSH client on a Mac or Linux computer to connect to your Linux instance, use the
-following command to set the permissions of your private key ﬁle. That way, only you can read
-it.
-$ chmod 400 your_user_name-key-pair-region_name.pem
-
-For more information, see Amazon EC2 Key Pairs in the Amazon EC2 User Guide.
-To connect to your instance using your key pair
-To connect to your Linux instance from a computer running Mac or Linux, specify the .pem ﬁle
-to your SSH client with the -i option and the path to your private key. To connect to your Linux
-instance from a computer running Windows, use either MindTerm or PuTTY. If you plan to use
-PuTTY, install it and use the following procedure to convert the .pem ﬁle to a .ppk ﬁle.
-(Optional) To prepare to connect to a Linux instance from Windows using PuTTY
-1.
-
-Download and install PuTTY from http://www.chiark.greenend.org.uk/~sgtatham/putty/. Be
-sure to install the entire suite.
-
-2.
-
-Start PuTTYgen (for example, from the Start menu, choose All Programs, PuTTY, and
-PuTTYgen).
-
-3.
-
-Under Type of key to generate, choose RSA. If you're using an earlier version of PuTTYgen,
-choose SSH-2 RSA.
-
-Create a key pair
-
-11
-
-AWS Batch
-
-4.
-
-User Guide
-
-Choose Load. By default, PuTTYgen displays only ﬁles with the extension .ppk. To locate your
-.pem ﬁle, choose the option to display ﬁles of all types.
-
-5.
-
-Select the private key ﬁle that you created in the previous procedure and choose Open.
-Choose OK to dismiss the conﬁrmation dialog box.
-
-6.
-
-Choose Save private key. PuTTYgen displays a warning about saving the key without a
-passphrase. Choose Yes.
-
-7.
-
-Specify the same name for the key that you used for the key pair. PuTTY automatically adds
-the .ppk ﬁle extension.
-
-Create a VPC
-With Amazon Virtual Private Cloud (Amazon VPC), you can launch AWS resources into a virtual
-network that you've deﬁned. We strongly recommend that you launch your container instances in a
-VPC.
-If you have a default VPC, you also can skip this section and move to the next task Create a security
-group. To determine whether you have a default VPC, see Supported Platforms in the Amazon EC2
-Console in the Amazon EC2 User Guide
-For information about how to create an Amazon VPC, see Create a VPC only in the Amazon VPC
-User Guide. Refer to the following table to determine what options to select.
-Option
-
-Value
-
-Resources to create
-
-VPC only
-
-Name
-
-Optionally provide a name for
-your VPC.
-
-IPv4 CIDR block
-
-IPv4 CIDR manual input
-The CIDR block size must
-have a size between /16
-and /28.
-
-Create a VPC
-
-12
-
-AWS Batch
-
-User Guide
-
-Option
-
-Value
-
-IPv6 CIDR block
-
-No IPv6 CIDR block
-
-Tenancy
-
-Default
-
-For more information about Amazon VPC, see What is Amazon VPC? in the Amazon VPC User Guide.
-
-Create a security group
-Security groups act as a ﬁrewall for associated compute environment container instances,
-controlling both inbound and outbound traﬃc at the container instance level. A security group can
-be used only in the VPC for which it is created.
-You can add rules to a security group that enable you to connect to your container instance from
-your IP address using SSH. You can also add rules that allow inbound and outbound HTTP and
-HTTPS access from anywhere. Add any rules to open ports that are required by your tasks.
-Note that if you plan to launch container instances in multiple Regions, you need to create a
-security group in each Region. For more information, see Regions and Availability Zones in the
-Amazon EC2 User Guide.
-Note
-You need the public IP address of your local computer, which you can get using a service.
-For example, we provide the following service: http://checkip.amazonaws.com/ or https://
-checkip.amazonaws.com/. To locate another service that provides your IP address, use the
-search phrase "what is my IP address." If you're connecting through an Internet service
-provider (ISP) or from behind a ﬁrewall without a static IP address, ﬁnd out the range of IP
-addresses that are used by client computers.
-
-To create a security group using the console
-1.
-
-Open the Amazon VPC console at https://console.aws.amazon.com/vpc/.
-
-2.
-
-In the navigation pane, choose Security Groups.
-
-3.
-
-Choose Create security group.
-
-Create a security group
-
-13
-
-AWS Batch
-
-4.
-
-User Guide
-
-Enter a name and description for the security group. You cannot change the name and
-description of a security group after it is created.
-
-5.
-
-From VPC, choose the VPC.
-
-6.
-
-(Optional) By default, new security groups start with only an outbound rule that allows all
-traﬃc to leave the resource. You must add rules to enable any inbound traﬃc or to restrict the
-outbound traﬃc.
-AWS Batch container instances don't require any inbound ports to be open. However, you
-might want to add an SSH rule. That way, you can log into the container instance and examine
-the containers in jobs with Docker commands. If you want your container instance to host a job
-that runs a web server, you can also add rules for HTTP. Complete the following steps to add
-these optional security group rules.
-On the Inbound tab, create the following rules and choose Create:
-• Choose Add Rule. For Type, choose HTTP. For Source, choose Anywhere (0.0.0.0/0).
-• Choose Add Rule. For Type, choose SSH. For Source, choose Custom IP, and specify the
-public IP address of your computer or network in Classless Inter-Domain Routing (CIDR)
-notation. If your company allocates addresses from a range, specify the entire range, such as
-203.0.113.0/24. To specify an individual IP address in CIDR notation, choose My IP. This
-adds the routing preﬁx /32 to the public IP address.
-
-Note
-For security reasons, we don't recommend that you allow SSH access from all IP
-addresses (0.0.0.0/0) to your instance but only for testing purposes and only for a
-short time.
-7.
-
-You can add tags now, or you can add them later. To add a tag, choose Add new tag and enter
-the tag key and value.
-
-8.
-
-Choose Create security group.
-
-To create a security group using the command line, see create-security-group (AWS CLI)
-For more information about security groups, see Work with security groups.
-
-Create a security group
-
-14
-
-AWS Batch
-
-User Guide
-
-Install the AWS CLI
-To use the AWS CLI with AWS Batch, install the latest AWS CLI version. For information about
-installing the AWS CLI or upgrading it to the latest version, see Installing the AWS Command Line
-Interface in the AWS Command Line Interface User Guide.
-
-Install the AWS CLI
-
-15
-
-AWS Batch
-
-User Guide
-
 Getting started with AWS Batch tutorials
 You can use the AWS Batch ﬁrst-run wizard to get started quickly with AWS Batch. After you
 complete the Prerequisites, you can use the ﬁrst-run wizard to create a compute environment, a job
@@ -661,195 +300,259 @@ Prerequisites
 
 User Guide
 
-1.
+Best practices for AWS Batch
+You can use AWS Batch to run a variety of demanding computational workloads at scale without
+managing a complex architecture. AWS Batch jobs can be used in a wide range of use cases in areas
+such as epidemiology, gaming, and machine learning.
+This topic covers the best practices to consider while using AWS Batch and guidance on how to run
+and optimize your workloads when using AWS Batch.
+Topics
+• When to use AWS Batch
+• Checklist to run at scale
+• Optimize containers and AMIs
+• Choose the right compute environment resource
+• Amazon EC2 On-Demand or Amazon EC2 Spot
+• Use Amazon EC2 Spot best practices for AWS Batch
+• Common errors and troubleshooting
 
-Open the AWS Batch console ﬁrst-run wizard.
+When to use AWS Batch
+AWS Batch runs jobs at scale and at low cost, and provides queuing services and cost-optimized
+scaling. However, not every workload is suitable to be run using AWS Batch.
+• Short jobs – If a job runs for only a few seconds, the overhead to schedule the batch job might
+take longer than the runtime of the job itself. As a workaround, binpack your tasks together
+before you submit them in AWS Batch. Then, conﬁgure your AWS Batch jobs to iterate over the
+tasks. For example, stage the individual task arguments into an Amazon DynamoDB table or as a
+ﬁle in an Amazon S3 bucket. Consider grouping tasks so the jobs run 3-5 minutes each. After you
+binpack the jobs, loop through your task groups within your AWS Batch job.
+• Jobs that must be run immediately – AWS Batch can process jobs quickly. However, AWS Batch
+is a scheduler and optimizes for cost performance, job priority, and throughput. AWS Batch
+might require time to process your requests. If you need a response in under a few seconds, then
+a service-based approach using Amazon ECS or Amazon EKS is more suitable.
+When to use AWS Batch
 
-2.
-
-For Conﬁgure job and orchestration type, choose Amazon Elastic Compute Cloud(Amazon
-EC2).
-
-3.
-
-Choose Next.
-
-4.
-
-In the Compute environment conﬁguration section for Name, specify a unique name for
-your compute environment. The name can be up to 128 characters in length. It can contain
-uppercase and lowercase letters, numbers, hyphens (-), and underscores (_).
-
-5.
-
-For Instance role, choose an existing instance role that has the required IAM permissions
-attached. This instance role allows the Amazon ECS container instances in your compute
-environment to make calls to the required AWS API operations. For more information, see
-Amazon ECS instance role.
-The default name of the Instance role is ecsInstanceRole.
-
-6.
-
-For Instance conﬁguration you can leave the default settings.
-
-7.
-
-For Network conﬁguration use your default VPC for the AWS Region.
-
-8.
-
-Choose Next.
-
-Step 2: Create a job queue
-A job queue stores your submitted jobs until the AWS Batch Scheduler runs the job on a resource in
-your compute environment. For more information, see Job queues
-To create a job queue for an Amazon EC2 orchestration, do the following:
-1.
-
-For Job queue conﬁguration for Name, specify a unique name for your job queue. The name
-can be up to 128 characters in length. It can contain uppercase and lowercase letters, numbers,
-hyphens (-), and underscores (_).
-
-2.
-
-For all other conﬁguration options you can leave the default value.
-
-3.
-
-Choose Next.
-
-Step 3: Create a job deﬁnition
-AWS Batch job deﬁnitions specify how jobs are to be run. Even though each job must reference a
-job deﬁnition, many of the parameters that are speciﬁed in the job deﬁnition can be overridden at
-runtime.
-Step 2: Create a job queue
-
-18
+487
 
 AWS Batch
 
 User Guide
 
-To create the job deﬁnition:
-1.
+Checklist to run at scale
+Before you run a large workload on 50 thousand or more vCPUs, consider the following checklist.
 
-For Create a job deﬁnition
-a.
+Note
+If you plan to run a large workload on a million or more vCPUs or need guidance running at
+large scale, contact your AWS team.
 
-for Name, specify a unique name for your job queue. The name can be up to 128
-characters in length. It can contain uppercase and lowercase letters, numbers, hyphens (-),
-and underscores (_).
+• Check your Amazon EC2 quotas – Check your Amazon EC2 quotas (also known as limits) in the
+Service Quotas panel of the AWS Management Console. If necessary, request a quota increase for
+your peak number of Amazon EC2 instances. Remember that Amazon EC2 Spot and Amazon OnDemand instances have separate quotas. For more information, see Getting started with Service
+Quotas.
+• Verify your Amazon Elastic Block Store quota for each Region – Each instance uses a GP2 or
+GP3 volume for the operating system. By default, the quota for each AWS Region is 300 TiB.
+However, each instance uses counts as part of this quota. So, make sure to factor this in when
+you verify your Amazon Elastic Block Store quota for each Region. If your quota is reached, you
+can’t create more instances. For more information, see Amazon Elastic Block Store endpoints and
+quotas
+• Use Amazon S3 for storage – Amazon S3 provides high throughput and helps to eliminate the
+guesswork on how much storage to provision based on the number of jobs and instances in each
+Availability Zone. For more information, see Best practices design patterns: optimizing Amazon
+S3 performance.
+• Scale gradually to identify bottlenecks early – For a job that runs on a million or more vCPUs,
+start lower and gradually increase so that you can identify bottlenecks early. For example, start
+by running on 50 thousand vCPUs. Then, increase the count to 200 thousand vCPUs, and then
+500 thousand vCPUs, and so on. In other words, continue to gradually increase the vCPU count
+until you reach the desired number of vCPUs.
+• Monitor to identify potential issues early – To avoid potential breaks and issues when running
+at scale, make sure to monitor both your application and architecture. Breaks might occur
+even when scaling from 1 thousand to 5 thousand vCPUs. You can use Amazon CloudWatch
+Logs to review log data or use CloudWatch Embedded Metrics using a client library. For more
+information, see CloudWatch Logs agent reference and aws-embedded-metrics
+Checklist to run at scale
 
-b.
-
-For Command - optional you can change hello world to a custom message or leave it
-as is.
-
-2.
-
-For all other conﬁguration options you can leave the default value.
-
-3.
-
-Choose Next.
-
-Step 4: Create a job
-To create a job, do the following:
-1.
-
-In the Job conﬁguration section for Name, specify a unique name for the job. The name can
-be up to 128 characters in length. It can contain uppercase and lowercase letters, numbers,
-hyphens (-), and underscores (_).
-
-2.
-
-For all other conﬁguration options you can leave the default value.
-
-3.
-
-Choose Next.
-
-Step 5: Review and create
-On the Review and create page, review the conﬁguration steps. If you need to make changes,
-choose Edit. When you're ﬁnished, choose Create resources.
-1.
-
-For Review and create choose Create resources.
-
-2.
-
-A window opens as AWS Batch starts to allocate your resources. Once complete choose Go to
-dashboard. On the dashboard you should see all of your allocated resources and that the job is
-in the Runnable state. Your job is scheduled to run and should complete in 2–3 minuets.
-
-Step 6: View the Job's output
-To view the Job's output, do the following:
-Step 4: Create a job
-
-19
+488
 
 AWS Batch
 
 User Guide
 
-1.
+Optimize containers and AMIs
+Container size and structure are important for the ﬁrst set of jobs that you run. This is especially
+true if the container is larger than 4 GB. Container images are built in layers. The layers are
+retrieved in parallel by Docker using three concurrent threads. You can increase the number of
+concurrent threads using the max-concurrent-downloads parameter. For more information, see
+the Dockerd documentation.
+Although you can use larger containers, we recommend that you optimize container structure and
+size for faster startup times.
+• Smaller containers are fetched faster – Smaller containers can lead to faster application start
+times. To decrease container size, oﬄoad libraries or ﬁles that are updated infrequently to the
+Amazon Machine Image (AMI). You can also use bind mounts to give access to your containers.
+For more information, see Bind mounts.
+• Create layers that are even in size and break up large layers – Each layer is retrieved by one
+thread. So, a large layer might signiﬁcantly impact your job startup time. We recommend a
+maximum layer size of 2 GB as a good tradeoﬀ between larger container size and faster startup
+times. You can run the docker history your_image_id command to check your container
+image structure and layer size. For more information, see the Docker documentation.
+• Use Amazon Elastic Container Registry as your container repository – When you run thousands
+of jobs in parallel, a self-managed repository can fail or throttle throughput. Amazon ECR works
+at scale and can handle workloads with up to over a million vCPUs.
 
-In the navigation pane choose Jobs.
+Optimize containers and AMIs
 
-2.
+489
 
-In the Job queue drop down choose the Job queue you created for the tutorial.
+AWS Batch
 
-3.
+User Guide
 
-The Jobs table lists all of your Jobs and what their current status is. Once the Job's Status is
-Succeeded choose the Name of the Job to view the Job's details.
+Choose the right compute environment resource
+AWS Fargate requires less initial setup and conﬁguration than Amazon EC2 and is likely easier
+to use, particularly if it's your ﬁrst time. With Fargate, you don't need to manage servers, handle
+capacity planning, or isolate container workloads for security.
+If you have the following requirements, we recommend you use Fargate instances:
+• Your jobs must start quickly, speciﬁcally less than 30 seconds.
+• The requirements of your jobs are 16 vCPUs or less, no GPUs, and 120 GiB of memory or less.
+For more information, see When to use Fargate.
+If you have the following requirements, we recommend that you use Amazon EC2 instances:
+• You require increased control over the instance selection or require using speciﬁc instance types.
+• Your jobs require resources that AWS Fargate can’t provide, such as GPUs, more memory, a
+custom AMI, or the Amazon Elastic Fabric Adapter.
+• You require a high level of throughput or concurrency.
+• You need to customize your AMI, Amazon EC2 Launch Template, or access to special Linux
+parameters.
+With Amazon EC2, you can more ﬁnely tune your workload to your speciﬁc requirements and run at
+scale if needed.
 
-4.
+Amazon EC2 On-Demand or Amazon EC2 Spot
+Most AWS Batch customers use Amazon EC2 Spot instances because of the savings over OnDemand instances. However, if your workload runs for multiple hours and can't be interrupted,
+On-Demand instances might be more suitable for you. You can always try Spot instances ﬁrst and
+switch to On-Demand if necessary.
+If you have the following requirements and expectations, use Amazon EC2 On-Demand instances:
+• The runtime of your jobs is more than an hour, and you can't tolerate interruptions to your
+workload.
+Choose the right compute environment resource
 
-In the Details pane choose Log stream name. The CloudWatch console for the Job will open
-and there should be one event with the Message of hello world or your custom message.
+490
 
-Step 7: Clean up your tutorial resources
-You are charged for the Amazon EC2 instance while it is enabled. You can delete the instance to
-stop incurring charges.
-To delete the resources you created, do the following:
-1.
+AWS Batch
 
-In the navigation pane choose Job queue.
+User Guide
 
-2.
+• You have a strict SLO (service-level objective) for your overall workload and can’t increase
+computational time.
+• The instances that you require are more likely to see interruptions.
+If you have the following requirements and expectations, use Amazon EC2 Spot instances:
+• The runtime for your jobs is typically 30 minutes or less.
+• You can tolerate potential interruptions and job rescheduling as a part of your workload. For
+more information, see Spot Instance advisor.
+• Long running jobs can be restarted from a checkpoint if interrupted.
+You can mix both purchasing models by submitting on Spot instance ﬁrst and then use
+On-Demand instance as a fallback option. For example, submit your jobs on a queue that's
+connected to compute environments that are running on Amazon EC2 Spot instances. If a job
+gets interrupted, catch the event from Amazon EventBridge and correlate it to a Spot instance
+reclamation. Then, resubmit the job to an On-Demand queue using an AWS Lambda function or
+AWS Step Functions. For more information, see Tutorial: Sending Amazon Simple Notiﬁcation
+Service alerts for failed job events, Best practices for handling Amazon EC2 Spot Instance
+interruptions and Manage AWS Batch with Step Functions.
 
-In the Job queue table choose the Job queue you created for the tutorial.
+Important
+Use diﬀerent instance types, sizes, and Availability Zones for your On-Demand compute
+environment to maintain Amazon EC2 Spot instance pool availability and decrease the
+interruption rate.
 
-3.
+Use Amazon EC2 Spot best practices for AWS Batch
+When you choose Amazon Elastic Compute Cloud (EC2) Spot instances, you likely can optimize
+your workﬂow to save costs, sometimes signiﬁcantly. For more information, see Best practices for
+Amazon EC2 Spot.
+To optimize your workﬂow to save costs, consider the following Amazon EC2 Spot best practices
+for AWS Batch:
 
-Choose Disable. Once the Job queue State is Disabled you can choose Delete.
+Use Amazon EC2 Spot best practices for AWS Batch
 
-4.
+491
 
-Once the Job queue is deleted, in the navigation pane choose Compute environments.
+AWS Batch
 
-5.
+User Guide
 
-Choose the compute environment you created for this tutorial and then choose Disable. It may
-take 1–2 minuets for the compute environment to complete being disabled.
+• Choose the SPOT_CAPACITY_OPTIMIZED allocation strategy – AWS Batch chooses Amazon
+EC2 instances from the deepest Amazon EC2 Spot capacity pools. If you’re concerned about
+interruptions, this is a suitable choice. For more information, see Instance type allocation
+strategies for AWS Batch.
+• Diversify instance types – To diversify your instance types, consider compatible sizes and
+families, then let AWS Batch choose based on price or availability. For example, consider
+c5.24xlarge as an alternative to c5.12xlarge or c5a, c5n, c5d, m5, and m5d families. For
+more information, see Be ﬂexible about instance types and Availability Zones.
+• Reduce job runtime or checkpoint – We advise against running jobs that take an hour or more
+when using Amazon EC2 Spot instances to avoid interruptions. If you divide or checkpoint
+your jobs into smaller parts that consist of 30 minutes or less, you can signiﬁcantly reduce the
+possibility of interruptions.
+• Use automated retries – To avoid disruptions to AWS Batch jobs, set automated retries for jobs.
+Batch jobs can be disrupted for any of the following reasons: a non-zero exit code is returned, a
+service error occurs, or an instance reclamation occurs. You can set up to 10 automated retries.
+For a start, we recommend that you set at least 1-3 automated retries. For information about
+tracking Amazon EC2 Spot interruptions, see Spot Interruption Dashboard.
+For AWS Batch, if you set the retry parameter, the job is placed at the front of the job queue.
+That is, the job is given priority. When you create the job deﬁnition or you submit the job in the
+AWS CLI, you can conﬁgure a retry strategy. For more information, see submit-job.
+$ aws batch submit-job --job-name MyJob \
+--job-queue MyJQ \
+--job-definition MyJD \
+--retry-strategy attempts=2
 
-6.
+• Use custom retries – You can conﬁgure a job retry strategy to a speciﬁc application exit code
+or instance reclamation. In the following example, if the host causes the failure, the job can
+be retried up to ﬁve times. However, if the job fails for a diﬀerent reason, the job exits and the
+status is set to FAILED.
+"retryStrategy": {
+"attempts": 5,
+"evaluateOnExit":
+[{
+"onStatusReason" :"Host EC2*",
+"action": "RETRY"
+Use Amazon EC2 Spot best practices for AWS Batch
 
-Once the compute environment’s State is Disabled, choose Delete. It may take 1–2 minuets for
-the compute environment to be deleted.
+492
 
-Additional resources
-After you complete the tutorial, you might want to explore the following topics::
-• Explore the AWS Batch core components. For more information, see Components of AWS Batch.
-• Learn more about the diﬀerent Compute Environments available in AWS Batch.
-• Learn more about Job queues and their diﬀerent scheduling options.
-• Learn more about Job deﬁnitions and the diﬀerent conﬁguration options.
-• Learn more about the diﬀerent types of Jobs.
+AWS Batch
 
-Step 7: Clean up your tutorial resources
+User Guide
 
-20
+},{
+"onReason" : "*",
+"action": "EXIT"
+}]
+}
+
+• Use the Spot Interruption Dashboard – You can use the Spot Interruption Dashboard to track
+Spot interruptions. The application provides metrics on Amazon EC2 Spot instances that are
+reclaimed and which Availability Zones that Spot instances are in. For more information, see Spot
+Interruption Dashboard
+
+Common errors and troubleshooting
+Errors in AWS Batch often occur at the application level or are caused by instance conﬁgurations
+that don’t meet your speciﬁc job requirements. Other issues include jobs getting stuck in
+the RUNNABLE status or compute environments getting stuck in an INVALID state. For more
+information about troubleshooting jobs getting stuck in RUNNABLE status, see Jobs stuck in a
+RUNNABLE status. For information about troubleshooting compute environments in an INVALID
+state, see INVALID compute environment.
+• Check Amazon EC2 Spot vCPU quotas – Verify that your current service quotas meet the job
+requirements. For example, suppose that your current service quota is 256 vCPUs and the job
+requires 10,000 vCPUs. Then, the service quota doesn't meet the job requirement. For more
+information and troubleshooting instructions, see Amazon EC2 service quotas and How do I
+increase the service quota of my Amazon EC2resources?.
+• Jobs fail before the application runs – Some jobs might fail because of a
+DockerTimeoutError error or a CannotPullContainerError error. For troubleshooting
+information, see How do I resolve the "DockerTimeoutError" error in AWS Batch?.
+• Insuﬃcient IP addresses – The number of IP addresses in your VPC and subnets can limit the
+number of instances that you can create. Use Classless Inter-Domain Routings (CIDRs) to provide
+more IP addresses than are required to run your workloads. If necessary, you can also build a
+dedicated VPC with a large address space. For example, you can create a VPC with multiple
+CIDRs in 10.x.0.0/16 and a subnet in every Availability Zone with a CIDR of 10.x.y.0/17.
+In this example, x is between 1-4 and y is either 0 or 128. This conﬁguration provides 36,000 IP
+addresses in every subnet.
+
+Common errors and troubleshooting
+
+493
 
 
