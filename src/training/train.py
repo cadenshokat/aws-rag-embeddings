@@ -66,8 +66,8 @@ def main():
     trainer.train()
     trainer.save_model()
 
-    if os.getenv("HUGGINGFACE_HUB_TOKEN"):
-        trainer.model.push_to_hub(CFG.output_dir)
+    
+    trainer.model.push_to_hub(CFG.output_dir)
 
 if __name__ == "__main__":
     main()
