@@ -43,7 +43,7 @@ def main():
         learning_rate=2e-5,
         lr_scheduler_type="cosine",
         optim="adamw_torch_fused",
-        tf32=True,
+        tf32=False,
         bf16=True,
         batch_sampler=BatchSamplers.NO_DUPLICATES,
         eval_strategy="epoch",
