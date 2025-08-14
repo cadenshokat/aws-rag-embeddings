@@ -23,3 +23,17 @@ recall@5              0.3451       0.3560       0.3152       0.2935       0.2174
 recall@10             0.5000       0.5163       0.4674       0.4130       0.3207
 -------------------------------------------------------------------------------------
 seq_score: 0.164851
+
+---
+
+metadata
+title: modernbert-finetuned-embeddings
+emoji: 👾
+colorFrom: pink
+colorTo: blue
+sdk: gradio
+sdk_version: 5.42.0
+app_file: app.py
+pinned: true
+
+---
