@@ -209,5 +209,5 @@ __marimo__/
 dataset
 data/
 *.jsonl
-*.txt
+dataset/*.txt
 *.json
