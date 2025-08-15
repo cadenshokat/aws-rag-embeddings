@@ -44,7 +44,7 @@ def main():
         lr_scheduler_type="cosine",
         optim="adamw_torch_fused",
         tf32=False,
-        bf16=True,
+        bf16=False,
         batch_sampler=BatchSamplers.NO_DUPLICATES,
         eval_strategy="epoch",
         save_strategy="epoch",
