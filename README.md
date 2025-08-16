@@ -2,9 +2,9 @@
 
 **Links:** [Dataset] · [Model] · [Space]
 
-[Dataset]: https://huggingface.co/datasets/your-hf-username/your-dataset
-[Model]: https://huggingface.co/your-hf-username/your-model
-[Space]: https://huggingface.co/spaces/your-hf-username/your-space
+[Dataset]: https://huggingface.co/datasets/CadenShokat/aws-rag-qa-positives
+[Model]: https://huggingface.co/CadenShokat/modernbert-embed-aws
+[Space]: https://huggingface.co/spaces/CadenShokat/modernbert-finetuned-embeddings
 
 ---
 
