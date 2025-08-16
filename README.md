@@ -1,5 +1,11 @@
 # Fine-Tuning Embedding Models for Retrieval on **AWS Documentation** (MRL)
 
+**Links:** [Dataset] · [Model] · [Space]
+
+[Dataset]: https://huggingface.co/datasets/your-hf-username/your-dataset
+[Model]: https://huggingface.co/your-hf-username/your-model
+[Space]: https://huggingface.co/spaces/your-hf-username/your-space
+
 ---
 
 ## At a Glance
