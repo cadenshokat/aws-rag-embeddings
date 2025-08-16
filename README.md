@@ -1,9 +1,5 @@
 # Fine-Tuning Embedding Models for Retrieval on **AWS Documentation** (MRL)
 
-> **Elevator pitch (for recruiters):**  
-> I fine-tuned `nomic-ai/modernbert-embed-base` on a domain-specific dataset built from **chunked AWS docs** (EC2, S3, Lambda, API Gateway, RDS, IAM). Using **Matryoshka Representation Learning (MRL)**, one model serves multiple embedding sizes (768→64d) with large retrieval gains.  
-> **Result:** consistent +40–65% improvements on core IR metrics (nDCG/MRR/MAP) across all dimensions—**while enabling smaller, faster vectors** for production.
-
 ---
 
 ## At a Glance
