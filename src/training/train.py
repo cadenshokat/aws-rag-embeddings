@@ -5,12 +5,13 @@ from sentence_transformers.losses import MultipleNegativesRankingLoss
 from sentence_transformers.trainer import SentenceTransformerTrainer, SentenceTransformerTrainingArguments
 from sentence_transformers.training_args import BatchSamplers
 from sentence_transformers.losses import MatryoshkaLoss
-
+from huggingface_hub import login
 from src.utils.config import CFG
 from src.utils.paths import TRAIN_JSON, TEST_JSON
 from src.eval.ir_eval import build_eval
 
 def main():
+    HF_TOKEN = os.getenv("HUGGING_FACE_HUB_TOKEN")
     device = "cuda" if torch.cuda.is_available() else ("mps" if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available() else "cpu")
 
     # base model with SDPA
@@ -66,8 +67,9 @@ def main():
     trainer.train()
     trainer.save_model()
 
-    
-    trainer.model.push_to_hub(CFG.output_dir)
+    if HF_TOKEN:
+        login(token=HF_TOKEN)
+        trainer.model.push_to_hub(CFG.output_dir)
 
 if __name__ == "__main__":
     main()
